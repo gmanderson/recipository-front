@@ -14,7 +14,7 @@ class HomeView {
 
   render(){
     const template = html`
-      <va-app-header title="Home" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
+      <va-app-header title="My Recipe Book" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
       
       <div class="page-content">
         <h1 class="anim-in">Hey ${Auth.currentUser.firstName}</h1>
@@ -25,6 +25,7 @@ class HomeView {
         <h3>Link example</h3>
         <a href="/profile" @click=${anchorRoute}>View Profile</a>
         
+        <va-recipe-block></va-recipe-block>
       </div>
      
     `

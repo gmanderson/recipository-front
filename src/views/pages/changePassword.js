@@ -4,9 +4,9 @@ import {gotoRoute, anchorRoute} from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
 
-class ChangePasswordView {
+class ShoppingListView {
   init(){
-    document.title = 'Change Password'    
+    document.title = 'Shopping List'    
     this.render()    
     Utils.pageIntroAnim()
   }
@@ -25,4 +25,4 @@ class ChangePasswordView {
 }
 
 
-export default new ChangePasswordView()
+export default new ShoppingListView()

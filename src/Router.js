@@ -5,6 +5,12 @@ import signinView from './views/pages/signin'
 import signupView from './views/pages/signup'
 import profileView from './views/pages/profile'
 import editProfileView from './views/pages/editProfile'
+import exploreView from './views/pages/explore'
+import guideView from './views/pages/guide'
+import recipeView from './views/pages/recipe'
+import createRecipeView from './views/pages/createRecipe'
+import shoppingListView from './views/pages/shoppingList'
+import changePasswordView from './views/pages/changePassword'
 
 // define routes
 const routes = {
@@ -13,7 +19,13 @@ const routes = {
 	'/signin': signinView,
 	'/signup': signupView,
 	'/profile': profileView,
-	'/editProfile': editProfileView	
+	'/editProfile': editProfileView,
+	'/explore': exploreView,
+	'/guide': guideView,
+	'/recipe': recipeView,
+	'/createRecipe': createRecipeView,
+	'/shoppingList': shoppingListView,
+	'/changePassword': changePasswordView
 }
 
 class Router {

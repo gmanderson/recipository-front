@@ -4,9 +4,9 @@ import {gotoRoute, anchorRoute} from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
 
-class ChangePasswordView {
+class TemplateView {
   init(){
-    document.title = 'Change Password'    
+    document.title = 'Template'    
     this.render()    
     Utils.pageIntroAnim()
   }
@@ -25,4 +25,4 @@ class ChangePasswordView {
 }
 
 
-export default new ChangePasswordView()
+export default new TemplateView()

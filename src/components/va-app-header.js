@@ -2,6 +2,7 @@ import { LitElement, html, css } from '@polymer/lit-element'
 import {anchorRoute, gotoRoute} from './../Router'
 import Auth from './../Auth'
 import App from './../App'
+import Router from './../Router'
 
 customElements.define('va-app-header', class AppHeader extends LitElement {
   constructor(){
@@ -59,7 +60,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         box-sizing: border-box;
       }
       .app-header {
-        background: var(--brand-color);
+        background: linear-gradient(#f68400, #F7D720); /*change to vars */
         position: fixed;
         top: 0;
         right: 0;
@@ -162,6 +163,15 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       </div>
 
       <nav class="app-top-nav">
+        <!-- Displays if at home route -->
+        ${(window.location.pathname == '/') ? html`
+        <sl-input pill></sl-input>
+        <sl-button pill>Search</sl-button>
+        <sl-button pill>Create Recipe</sl-button>
+        ` : html``}
+
+        
+
         <a href="/" @click="${anchorRoute}">Home</a>        
         <sl-dropdown>
           <a slot="trigger" href="#" @click="${(e) => e.preventDefault()}">

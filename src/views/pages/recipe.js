@@ -4,25 +4,24 @@ import {gotoRoute, anchorRoute} from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
 
-class ChangePasswordView {
+class RecipeView {
   init(){
-    document.title = 'Change Password'    
+    document.title = 'Recipe'    
     this.render()    
     Utils.pageIntroAnim()
   }
 
   render(){
     const template = html`
-      <va-app-header title="Profile" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
+      <va-app-header title="Recipe" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
       <div class="page-content">        
-        <h1>Page title</h1>
-        <p>Page content ...</p>
-        
-      </div>      
+
+      </div>   
+  
     `
     render(template, App.rootEl)
   }
 }
 
 
-export default new ChangePasswordView()
+export default new RecipeView()
