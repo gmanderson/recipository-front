@@ -25,7 +25,7 @@ class HomeView {
         <h3>Link example</h3>
         <a href="/profile" @click=${anchorRoute}>View Profile</a>
         
-        <va-recipe-block></va-recipe-block>
+        <va-recipe-card></va-recipe-card>
       </div>
      
     `

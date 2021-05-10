@@ -2,7 +2,7 @@ import App from './App.js'
 
 // components (custom web components)
 import './components/va-app-header'
-import './components/va-recipe-block'
+import './components/va-recipe-card'
 
 // styles
 import './scss/master.scss'

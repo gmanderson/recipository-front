@@ -7748,7 +7748,7 @@ var _Utils = _interopRequireDefault(require("./../../Utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n        \n        <va-recipe-block></va-recipe-block>\n      </div>\n     \n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n        \n        <va-recipe-card></va-recipe-card>\n      </div>\n     \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13913,7 +13913,87 @@ class EditProfileView {
 var _default = new EditProfileView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../UserAPI":"UserAPI.js","../../Toast":"Toast.js","moment":"../node_modules/moment/moment.js"}],"views/pages/explore.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../UserAPI":"UserAPI.js","../../Toast":"Toast.js","moment":"../node_modules/moment/moment.js"}],"RecipeAPI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _App = _interopRequireDefault(require("./App"));
+
+var _Auth = _interopRequireDefault(require("./Auth"));
+
+var _Toast = _interopRequireDefault(require("./Toast"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class RecipeAPI {
+  async getCompanyRecipes() {
+    const response = await fetch("".concat(_App.default.apiBase, "/recipe"), {
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken)
+      }
+    }); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem getting recipes');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  } // async createList(){
+  //   const response = await fetch(`${App.apiBase}/list`, {
+  //     method: 'POST'
+  //   })
+  //     // if response not ok
+  //     if(!response.ok){ 
+  //       // console log error
+  //       const err = await response.json()
+  //       if(err) console.log(err)
+  //       // throw error (exit this function)      
+  //       throw new Error('Problem creating list')
+  //     }
+  //     // convert response payload into json - store as data
+  //     const data = await response.json()
+  //     // return data
+  //     return data
+  // }
+  // async getUser(userId){
+  //   // validate
+  //   if(!userId) return
+  //   // fetch the json data
+  //   const response = await fetch(`${App.apiBase}/user/${userId}`, {
+  //     headers: { "Authorization": `Bearer ${localStorage.accessToken}`}
+  //   })
+  //   // if response not ok
+  //   if(!response.ok){ 
+  //     // console log error
+  //     const err = await response.json()
+  //     if(err) console.log(err)
+  //     // throw error (exit this function)      
+  //     throw new Error('Problem getting user')
+  //   }
+  //   // convert response payload into json - store as data
+  //   const data = await response.json()
+  //   // return data
+  //   return data
+  // }
+
+
+}
+
+var _default = new RecipeAPI();
+
+exports.default = _default;
+},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/explore.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13931,10 +14011,42 @@ var _Auth = _interopRequireDefault(require("./../../Auth"));
 
 var _Utils = _interopRequireDefault(require("./../../Utils"));
 
+var _RecipeAPI = _interopRequireDefault(require("./../../RecipeAPI"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _templateObject4() {
+  const data = _taggedTemplateLiteral(["\n          <va-recipe-card\n          title=", "\n          image=", "\n          >\n          </va-recipe-card>\n          <p>", "</p>\n        "]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject3() {
+  const data = _taggedTemplateLiteral(["        \n        ", "\n        \n        "]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  const data = _taggedTemplateLiteral(["\n            <sl-spinner></sl-spinner>\n        "]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Explore Recipes\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">        \n        <h1>Page title</h1>\n        <p>Page content ...</p>\n        \n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Explore Recipes\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      ", "\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13947,14 +14059,27 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 class GuideView {
   init() {
-    document.title = 'Guide';
+    document.title = 'Explore Recipes';
+    this.recipes = null;
     this.render();
 
     _Utils.default.pageIntroAnim();
+
+    this.getCompanyRecipes();
+  }
+
+  async getCompanyRecipes() {
+    try {
+      this.recipes = await _RecipeAPI.default.getCompanyRecipes();
+      console.log(this.recipes);
+      this.render();
+    } catch (err) {
+      Toast.show(err, 'error');
+    }
   }
 
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser));
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.recipes == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.recipes.map(recipe => (0, _litHtml.html)(_templateObject4(), recipe.title, recipe.image, recipe._id))));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -13963,7 +14088,7 @@ class GuideView {
 var _default = new GuideView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js"}],"views/pages/guide.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../RecipeAPI":"RecipeAPI.js"}],"views/pages/guide.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16242,21 +16367,25 @@ customElements.define('va-app-header', class AppHeader extends _litElement.LitEl
   }
 
 });
-},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js"}],"components/va-recipe-block.js":[function(require,module,exports) {
+},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js"}],"components/va-recipe-card.js":[function(require,module,exports) {
 "use strict";
 
 var _litElement = require("@polymer/lit-element");
 
-var _Router = require("./../Router");
+var _Router = require("../Router");
 
-var _Auth = _interopRequireDefault(require("./../Auth"));
+var _Auth = _interopRequireDefault(require("../Auth"));
 
-var _App = _interopRequireDefault(require("./../App"));
+var _App = _interopRequireDefault(require("../App"));
+
+var _RecipeAPI = _interopRequireDefault(require("../RecipeAPI"));
+
+var _Toast = _interopRequireDefault(require("../Toast"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n\n      div{\n          display: block;\n          width: 100%;\n      }\n\n    </style>\n\n    <div>\n        <sl-card>\n            <img slot=\"image\" src=\"\">\n            <div slot=\"footer\"><h3>Recipe Title</h3></div>\n        </sl-card>\n        <img>\n        \n    </div>\n\n    "]);
+  const data = _taggedTemplateLiteral(["\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n\n      div{\n          display: block;\n          width: 20em;\n      }\n\n      sl-card{\n        --border-radius: 50px;\n      }\n\n    </style>\n\n    <div>\n        <sl-card>\n            <img slot=\"image\" src=\"", "/images/", "\">\n            <div slot=\"footer\"><h3>", "</h3></div>\n        </sl-card>\n        <img>\n        \n    </div>\n\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -16267,18 +16396,22 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-customElements.define('va-recipe-block', class RecipeBlock extends _litElement.LitElement {
+customElements.define('va-recipe-card', class RecipeCard extends _litElement.LitElement {
   constructor() {
     super();
   }
 
   static get properties() {
-    return {//   title: {
-      //     type: String
-      //   },
-      //   user: {
-      //     type: Object
-      //   }
+    return {
+      id: {
+        type: String
+      },
+      title: {
+        type: String
+      },
+      image: {
+        type: String
+      }
     };
   }
 
@@ -16287,11 +16420,11 @@ customElements.define('va-recipe-block', class RecipeBlock extends _litElement.L
   }
 
   render() {
-    return (0, _litElement.html)(_templateObject());
+    return (0, _litElement.html)(_templateObject(), _App.default.apiBase, this.image, this.title);
   }
 
 });
-},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","../Router":"Router.js","../Auth":"Auth.js","../App":"App.js","../RecipeAPI":"RecipeAPI.js","../Toast":"Toast.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -16370,7 +16503,7 @@ var _App = _interopRequireDefault(require("./App.js"));
 
 require("./components/va-app-header");
 
-require("./components/va-recipe-block");
+require("./components/va-recipe-card");
 
 require("./scss/master.scss");
 
@@ -16382,7 +16515,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener('DOMContentLoaded', () => {
   _App.default.init();
 });
-},{"./App.js":"App.js","./components/va-app-header":"components/va-app-header.js","./components/va-recipe-block":"components/va-recipe-block.js","./scss/master.scss":"scss/master.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./App.js":"App.js","./components/va-app-header":"components/va-app-header.js","./components/va-recipe-card":"components/va-recipe-card.js","./scss/master.scss":"scss/master.scss"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -16410,7 +16543,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53796" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52234" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
