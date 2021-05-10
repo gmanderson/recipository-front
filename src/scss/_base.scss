@@ -108,6 +108,17 @@ a {
   
 }
 
+.recipes-grid{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 5%;
+  margin-right: 5%;
+  .recipe-card{
+    width: calc(33.33% - 1em);
+    margin: 0.5em;
+  }
+}
+
 // sign in + sign up pages ----------
 .signinup-box,
 .signup-box {  

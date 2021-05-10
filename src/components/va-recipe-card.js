@@ -44,9 +44,13 @@ customElements.define('va-recipe-card', class RecipeCard extends LitElement {
         --border-radius: 50px;
       }
 
+      .wrap{
+        display: flex;
+      }
+
     </style>
 
-    <div>
+    <div class="wrap">
         <sl-card>
             <img slot="image" src="${App.apiBase}/images/${this.image}">
             <div slot="footer"><h3>${this.title}</h3></div>

@@ -7727,7 +7727,176 @@ class Utils {
 var _default = new Utils();
 
 exports.default = _default;
-},{"gsap":"../node_modules/gsap/index.js"}],"views/pages/home.js":[function(require,module,exports) {
+},{"gsap":"../node_modules/gsap/index.js"}],"RecipeAPI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _App = _interopRequireDefault(require("./App"));
+
+var _Auth = _interopRequireDefault(require("./Auth"));
+
+var _Toast = _interopRequireDefault(require("./Toast"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class RecipeAPI {
+  async getCompanyRecipes() {
+    const response = await fetch("".concat(_App.default.apiBase, "/recipe/explore"), {
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken)
+      }
+    }); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem getting recipes');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  } // async createList(){
+  //   const response = await fetch(`${App.apiBase}/list`, {
+  //     method: 'POST'
+  //   })
+  //     // if response not ok
+  //     if(!response.ok){ 
+  //       // console log error
+  //       const err = await response.json()
+  //       if(err) console.log(err)
+  //       // throw error (exit this function)      
+  //       throw new Error('Problem creating list')
+  //     }
+  //     // convert response payload into json - store as data
+  //     const data = await response.json()
+  //     // return data
+  //     return data
+  // }
+  // async getUser(userId){
+  //   // validate
+  //   if(!userId) return
+  //   // fetch the json data
+  //   const response = await fetch(`${App.apiBase}/user/${userId}`, {
+  //     headers: { "Authorization": `Bearer ${localStorage.accessToken}`}
+  //   })
+  //   // if response not ok
+  //   if(!response.ok){ 
+  //     // console log error
+  //     const err = await response.json()
+  //     if(err) console.log(err)
+  //     // throw error (exit this function)      
+  //     throw new Error('Problem getting user')
+  //   }
+  //   // convert response payload into json - store as data
+  //   const data = await response.json()
+  //   // return data
+  //   return data
+  // }
+
+
+}
+
+var _default = new RecipeAPI();
+
+exports.default = _default;
+},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"UserAPI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _App = _interopRequireDefault(require("./App"));
+
+var _Auth = _interopRequireDefault(require("./Auth"));
+
+var _Toast = _interopRequireDefault(require("./Toast"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class UserAPI {
+  async updateUser(userId, userData) {
+    let dataType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'form';
+    // validate
+    if (!userId || !userData) return;
+    let responseHeader; // form data
+
+    if (dataType == 'form') {
+      // fetch response header normal (form data)
+      responseHeader = {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer ".concat(localStorage.accessToken)
+        },
+        body: userData
+      }; // json data
+    } else if (dataType == 'json') {
+      responseHeader = {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer ".concat(localStorage.accessToken),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+      };
+    } // make fetch request to backend
+
+
+    const response = await fetch("".concat(_App.default.apiBase, "/user/").concat(userId), responseHeader); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem updating user');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  }
+
+  async getUser(userId) {
+    // validate
+    if (!userId) return; // fetch the json data
+
+    const response = await fetch("".concat(_App.default.apiBase, "/user/").concat(userId), {
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken)
+      }
+    }); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem getting user');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  }
+
+}
+
+var _default = new UserAPI();
+
+exports.default = _default;
+},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/home.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7745,10 +7914,46 @@ var _Auth = _interopRequireDefault(require("./../../Auth"));
 
 var _Utils = _interopRequireDefault(require("./../../Utils"));
 
+var _Toast = _interopRequireDefault(require("./../../Toast"));
+
+var _RecipeAPI = _interopRequireDefault(require("./../../RecipeAPI"));
+
+var _UserAPI = _interopRequireDefault(require("./../../UserAPI"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _templateObject4() {
+  const data = _taggedTemplateLiteral(["\n          <va-recipe-card class=\"recipe-card\"\n          title=", "\n          image=", "\n          >\n          </va-recipe-card>\n        "]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject3() {
+  const data = _taggedTemplateLiteral(["\n        ", "\n        \n        "]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  const data = _taggedTemplateLiteral(["\n            <sl-spinner></sl-spinner>\n        "]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n        \n        <va-recipe-card></va-recipe-card>\n      </div>\n     \n    "]);
+  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <h1 class=\"anim-in\">Hey ", "</h1>\n\n        <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a>\n        \n      <div class=\"recipes-grid\">\n        ", "\n      </div>\n      </div>\n     \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -7763,13 +7968,27 @@ class HomeView {
   init() {
     console.log('HomeView.init');
     document.title = 'Home';
+    this.favRecipes = null;
     this.render();
 
     _Utils.default.pageIntroAnim();
+
+    this.getFavRecipes();
+  }
+
+  async getFavRecipes() {
+    try {
+      const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+      this.favRecipes = currentUser.recipes;
+      console.log(this.favRecipes);
+      this.render();
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    }
   }
 
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser.firstName, () => (0, _Router.gotoRoute)('/profile'), _Router.anchorRoute);
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser.firstName, () => (0, _Router.gotoRoute)('/profile'), _Router.anchorRoute, this.favRecipes == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.favRecipes.map(recipe => (0, _litHtml.html)(_templateObject4(), recipe.title, recipe.image))));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -7778,7 +7997,7 @@ class HomeView {
 var _default = new HomeView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js"}],"views/pages/404.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../Toast":"Toast.js","./../../RecipeAPI":"RecipeAPI.js","./../../UserAPI":"UserAPI.js"}],"views/pages/404.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13694,96 +13913,7 @@ class ProfileView {
 var _default = new ProfileView();
 
 exports.default = _default;
-},{"../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","../../Router":"Router.js","../../Auth":"Auth.js","../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js"}],"UserAPI.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _App = _interopRequireDefault(require("./App"));
-
-var _Auth = _interopRequireDefault(require("./Auth"));
-
-var _Toast = _interopRequireDefault(require("./Toast"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-class UserAPI {
-  async updateUser(userId, userData) {
-    let dataType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'form';
-    // validate
-    if (!userId || !userData) return;
-    let responseHeader; // form data
-
-    if (dataType == 'form') {
-      // fetch response header normal (form data)
-      responseHeader = {
-        method: "PUT",
-        headers: {
-          "Authorization": "Bearer ".concat(localStorage.accessToken)
-        },
-        body: userData
-      }; // json data
-    } else if (dataType == 'json') {
-      responseHeader = {
-        method: "PUT",
-        headers: {
-          "Authorization": "Bearer ".concat(localStorage.accessToken),
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData)
-      };
-    } // make fetch request to backend
-
-
-    const response = await fetch("".concat(_App.default.apiBase, "/user/").concat(userId), responseHeader); // if response not ok
-
-    if (!response.ok) {
-      // console log error
-      const err = await response.json();
-      if (err) console.log(err); // throw error (exit this function)      
-
-      throw new Error('Problem updating user');
-    } // convert response payload into json - store as data
-
-
-    const data = await response.json(); // return data
-
-    return data;
-  }
-
-  async getUser(userId) {
-    // validate
-    if (!userId) return; // fetch the json data
-
-    const response = await fetch("".concat(_App.default.apiBase, "/user/").concat(userId), {
-      headers: {
-        "Authorization": "Bearer ".concat(localStorage.accessToken)
-      }
-    }); // if response not ok
-
-    if (!response.ok) {
-      // console log error
-      const err = await response.json();
-      if (err) console.log(err); // throw error (exit this function)      
-
-      throw new Error('Problem getting user');
-    } // convert response payload into json - store as data
-
-
-    const data = await response.json(); // return data
-
-    return data;
-  }
-
-}
-
-var _default = new UserAPI();
-
-exports.default = _default;
-},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/editProfile.js":[function(require,module,exports) {
+},{"../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","../../Router":"Router.js","../../Auth":"Auth.js","../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js"}],"views/pages/editProfile.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13913,87 +14043,7 @@ class EditProfileView {
 var _default = new EditProfileView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../UserAPI":"UserAPI.js","../../Toast":"Toast.js","moment":"../node_modules/moment/moment.js"}],"RecipeAPI.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _App = _interopRequireDefault(require("./App"));
-
-var _Auth = _interopRequireDefault(require("./Auth"));
-
-var _Toast = _interopRequireDefault(require("./Toast"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-class RecipeAPI {
-  async getCompanyRecipes() {
-    const response = await fetch("".concat(_App.default.apiBase, "/recipe"), {
-      headers: {
-        "Authorization": "Bearer ".concat(localStorage.accessToken)
-      }
-    }); // if response not ok
-
-    if (!response.ok) {
-      // console log error
-      const err = await response.json();
-      if (err) console.log(err); // throw error (exit this function)      
-
-      throw new Error('Problem getting recipes');
-    } // convert response payload into json - store as data
-
-
-    const data = await response.json(); // return data
-
-    return data;
-  } // async createList(){
-  //   const response = await fetch(`${App.apiBase}/list`, {
-  //     method: 'POST'
-  //   })
-  //     // if response not ok
-  //     if(!response.ok){ 
-  //       // console log error
-  //       const err = await response.json()
-  //       if(err) console.log(err)
-  //       // throw error (exit this function)      
-  //       throw new Error('Problem creating list')
-  //     }
-  //     // convert response payload into json - store as data
-  //     const data = await response.json()
-  //     // return data
-  //     return data
-  // }
-  // async getUser(userId){
-  //   // validate
-  //   if(!userId) return
-  //   // fetch the json data
-  //   const response = await fetch(`${App.apiBase}/user/${userId}`, {
-  //     headers: { "Authorization": `Bearer ${localStorage.accessToken}`}
-  //   })
-  //   // if response not ok
-  //   if(!response.ok){ 
-  //     // console log error
-  //     const err = await response.json()
-  //     if(err) console.log(err)
-  //     // throw error (exit this function)      
-  //     throw new Error('Problem getting user')
-  //   }
-  //   // convert response payload into json - store as data
-  //   const data = await response.json()
-  //   // return data
-  //   return data
-  // }
-
-
-}
-
-var _default = new RecipeAPI();
-
-exports.default = _default;
-},{"./App":"App.js","./Auth":"Auth.js","./Toast":"Toast.js"}],"views/pages/explore.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../UserAPI":"UserAPI.js","../../Toast":"Toast.js","moment":"../node_modules/moment/moment.js"}],"views/pages/explore.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16385,7 +16435,7 @@ var _Toast = _interopRequireDefault(require("../Toast"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n\n      div{\n          display: block;\n          width: 20em;\n      }\n\n      sl-card{\n        --border-radius: 50px;\n      }\n\n    </style>\n\n    <div>\n        <sl-card>\n            <img slot=\"image\" src=\"", "/images/", "\">\n            <div slot=\"footer\"><h3>", "</h3></div>\n        </sl-card>\n        <img>\n        \n    </div>\n\n    "]);
+  const data = _taggedTemplateLiteral(["\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n\n      div{\n          display: block;\n          width: 20em;\n      }\n\n      sl-card{\n        --border-radius: 50px;\n      }\n\n      .wrap{\n        display: flex;\n      }\n\n    </style>\n\n    <div class=\"wrap\">\n        <sl-card>\n            <img slot=\"image\" src=\"", "/images/", "\">\n            <div slot=\"footer\"><h3>", "</h3></div>\n        </sl-card>\n        <img>\n        \n    </div>\n\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -16543,7 +16593,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52234" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64014" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

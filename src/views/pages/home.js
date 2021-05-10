@@ -3,13 +3,29 @@ import {html, render } from 'lit-html'
 import {gotoRoute, anchorRoute } from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
+import Toast from './../../Toast'
+import RecipeAPI from './../../RecipeAPI'
+import UserAPI from './../../UserAPI'
 
 class HomeView {
   init(){    
     console.log('HomeView.init')
-    document.title = 'Home'    
+    document.title = 'Home' 
+    this.favRecipes = null   
     this.render()    
     Utils.pageIntroAnim()    
+    this.getFavRecipes()
+  }
+
+  async getFavRecipes(){
+    try {
+      const currentUser = await UserAPI.getUser(Auth.currentUser._id)
+      this.favRecipes = currentUser.recipes
+      console.log(this.favRecipes)
+      this.render()
+    }catch(err){
+      Toast.show(err, 'error')
+    }
   }
 
   render(){
@@ -25,7 +41,20 @@ class HomeView {
         <h3>Link example</h3>
         <a href="/profile" @click=${anchorRoute}>View Profile</a>
         
-        <va-recipe-card></va-recipe-card>
+      <div class="recipes-grid">
+        ${this.favRecipes == null ? html`
+            <sl-spinner></sl-spinner>
+        ` : html`
+        ${this.favRecipes.map(recipe => html`
+          <va-recipe-card class="recipe-card"
+          title=${recipe.title}
+          image=${recipe.image}
+          >
+          </va-recipe-card>
+        `)}
+        
+        `}
+      </div>
       </div>
      
     `

@@ -125,6 +125,17 @@ a {
   color: var(--brand-color-red);
 }
 
+.recipes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.recipes-grid .recipe-card {
+  width: calc(33.33% - 1em);
+  margin: 0.5em;
+}
+
 .signinup-box,
 .signup-box {
   max-width: 320px;

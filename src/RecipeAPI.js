@@ -5,7 +5,7 @@ import Toast from './Toast'
 class RecipeAPI {
   
   async getCompanyRecipes(){
-    const response = await fetch(`${App.apiBase}/recipe`, {
+    const response = await fetch(`${App.apiBase}/recipe/explore`, {
       headers: { "Authorization": `Bearer ${localStorage.accessToken}`}
     })
 
