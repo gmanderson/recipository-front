@@ -175,7 +175,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <a href="/" @click="${anchorRoute}">Home</a>        
         <sl-dropdown>
           <a slot="trigger" href="#" @click="${(e) => e.preventDefault()}">
-            <sl-avatar style="--size: 24px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar> ${this.user && this.user.firstName}
+          
           </a>
           <sl-menu>            
             <sl-menu-item @click="${() => gotoRoute('/profile')}">Profile</sl-menu-item>
@@ -189,9 +189,13 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
     <sl-drawer class="app-side-menu" placement="left">
       <img class="app-side-menu-logo" src="/images/logo.svg">
       <nav class="app-side-menu-items">
-        <a href="/" @click="${this.menuClick}">Home</a>
-        <a href="/profile" @click="${this.menuClick}">Profile</a>
-        <a href="#" @click="${() => Auth.signOut()}">Sign Out</a>
+      <sl-avatar style="--size: 48px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
+        <p>${this.user.firstName} ${this.user.lastName}</p>
+        <a href="/" @click="${this.menuClick}">My Recipe Book</a>
+        <a href="/explore" @click="${this.menuClick}">Explore Recipes</a>
+        <a href="/shoppingList" @click="${this.menuClick}">Shopping List</a>
+        <a href="/account" @click="${this.menuClick}">Account</a>
+        <a href="#" @click="${() => Auth.signOut()}">Log Out</a>
       </nav>  
     </sl-drawer>
     `

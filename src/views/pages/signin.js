@@ -3,6 +3,7 @@ import {html, render } from 'lit-html'
 import {anchorRoute, gotoRoute} from './../../Router'
 import Auth from './../../Auth'
 import Utils from './../../Utils'
+import { parseTwoDigitYear } from 'moment'
 
 class SignInView {
   init(){
@@ -28,17 +29,19 @@ class SignInView {
     const template = html`      
       <div class="page-content page-centered">
         <div class="signinup-box">
-          <img class="signinup-logo" src="/images/logo.svg">          
+        <h1 class="brand-name">Recipository</h1>         
           <sl-form class="form-signup dark-theme" @sl-submit=${this.signInSubmitHandler}>          
             <div class="input-group">
-              <sl-input name="email" type="email" placeholder="Email" required></sl-input>
+              <sl-input name="email" type="email" placeholder="Email" required pill></sl-input>
             </div>
             <div class="input-group">
-              <sl-input name="password" type="password" placeholder="Password" required toggle-password></sl-input>
+              <sl-input name="password" type="password" placeholder="Password" required toggle-password pill></sl-input>
             </div>
-            <sl-button class="submit-btn" type="primary" submit style="width: 100%;">Sign In</sl-button>
+            <sl-button class="submit-btn" type="primary" submit pill style="width: 100%;">Log In</sl-button>
           </sl-form>
-          <p>No Account? <a href="/signup" @click=${anchorRoute}>Sign Up</a></p>
+          <p>Not a member?</p>
+          <sl-button class="" pill style="width: 100%;" type="primary" @click=${() => gotoRoute('/signup')}>Sign Up</sl-button>
+          <p>&#169; ${new Date().getFullYear()} Friendly Food Conglomerate</p>
         </div>
       </div>
     `

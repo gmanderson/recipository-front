@@ -16,7 +16,7 @@ class SignUpView{
   signUpSubmitHandler(e){
     e.preventDefault()    
     const submitBtn = document.querySelector('.submit-btn')
-    submitBtn.setAttribute('loading', '')    
+    submitBtn.setAttribute('loading', '') 
     const formData = e.detail.formData
     
     // sign up using Auth
@@ -43,7 +43,8 @@ class SignUpView{
             </div>
             <div class="input-group">
               <sl-input name="password" type="password" placeholder="Password" required toggle-password></sl-input>
-            </div>            
+            </div> 
+            <sl-checkbox name="accessLevel" type="checkbox" value="2">I wish to subscribe to Pro level membership. </sl-checkbox><a>Learn more.</a>        
             <sl-button type="primary" class="submit-btn" submit style="width: 100%;">Sign Up</sl-button>
           </sl-form>
           <p>Have an account? <a href="/signin" @click=${anchorRoute}>Sign In</a></p>

@@ -1,9 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,300;0,500;1,100;1,200;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sonsie+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sonsie+One&display=swap");
 :root {
   --base-txt-color: #222;
   --heading-color: #333;
-  --base-font-family: "Work Sans", sans-serif;
+  --base-font-family: "Quicksand", serif;
   --body-bg: #fff;
+  --brand-font: "Sonsie One", cursive;
+  --brand-color-red: #F65500;
+  --brand-color-yellow: #F7D720;
   --brand-color: #3cc6b9;
   --link-color: --brand-color;
   --app-header-height: 60px;
@@ -14,7 +19,7 @@
   --sl-color-primary-200: #b2e9e4;
   --sl-color-primary-300: #8bddd5;
   --sl-color-primary-400: #63d2c7;
-  --sl-color-primary-500: #3cc6b9;
+  --sl-color-primary-500: #F7D720;
   --sl-color-primary-600: #2fa096;
   --sl-color-primary-700: #237971;
   --sl-color-primary-800: #18514c;
@@ -111,6 +116,12 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.brand-name {
+  font-family: var(--brand-font);
+  font-size: 4.5em;
+  color: var(--brand-color-red);
 }
 
 .signinup-box,

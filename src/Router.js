@@ -3,7 +3,7 @@ import homeView from './views/pages/home'
 import fourOFourView from './views/pages/404'
 import signinView from './views/pages/signin'
 import signupView from './views/pages/signup'
-import profileView from './views/pages/profile'
+import profileView from './views/pages/account'
 import editProfileView from './views/pages/editProfile'
 import exploreView from './views/pages/explore'
 import guideView from './views/pages/guide'
@@ -18,7 +18,7 @@ const routes = {
 	'404' : fourOFourView,
 	'/signin': signinView,
 	'/signup': signupView,
-	'/profile': profileView,
+	'/account': profileView,
 	'/editProfile': editProfileView,
 	'/explore': exploreView,
 	'/guide': guideView,

@@ -101,11 +101,19 @@ a {
   justify-content: center;
 }
 
+.brand-name{
+  font-family: var(--brand-font);
+  font-size: 4.5em;
+  color: var(--brand-color-red);
+  
+}
+
 // sign in + sign up pages ----------
 .signinup-box,
 .signup-box {  
   max-width: 320px;
   text-align: center;
+
 }
 
 .signinup-logo {

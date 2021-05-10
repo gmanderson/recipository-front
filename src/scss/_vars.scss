@@ -4,12 +4,19 @@
   // base
   --base-txt-color: #222;
   --heading-color: #333;
-  --base-font-family: 'Work Sans', sans-serif;
+  --base-font-family: 'Quicksand', serif;
   --body-bg: #fff;
+
+
+  --brand-font: 'Sonsie One', cursive;
   
 
   // colors  
   $brand-color: #3cc6b9;
+  $brand-color-red: #F65500;
+  $brand-color-yellow: #F7D720;
+  --brand-color-red: #{$brand-color-red};
+  --brand-color-yellow: #{$brand-color-yellow};
   --brand-color: #{$brand-color};
   --link-color: --brand-color;
   
@@ -26,7 +33,7 @@
   --sl-color-primary-200: #{lighten($brand-color, 30%)};
   --sl-color-primary-300: #{lighten($brand-color, 20%)};
   --sl-color-primary-400: #{lighten($brand-color, 10%)};
-  --sl-color-primary-500: #{$brand-color};
+  --sl-color-primary-500: #{$brand-color-yellow}; // main button colour
   --sl-color-primary-600: #{darken($brand-color, 10%)};
   --sl-color-primary-700: #{darken($brand-color, 20%)};
   --sl-color-primary-800: #{darken($brand-color, 30%)};

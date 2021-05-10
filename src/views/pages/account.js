@@ -1,8 +1,8 @@
-import App from './../../App'
+import App from '../../App'
 import {html, render } from 'lit-html'
-import {gotoRoute, anchorRoute} from './../../Router'
-import Auth from './../../Auth'
-import Utils from './../../Utils'
+import {gotoRoute, anchorRoute} from '../../Router'
+import Auth from '../../Auth'
+import Utils from '../../Utils'
 import moment from 'moment'
 
 class ProfileView {

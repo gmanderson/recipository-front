@@ -3,23 +3,31 @@ import Router, { gotoRoute } from './Router'
 import splash from './views/partials/splash'
 import {html, render } from 'lit-html'
 import Toast from './Toast'
+import ListAPI from './ListAPI'
 
 class Auth {
 
   constructor(){
     this.currentUser = {}
   }
-  
-  async signUp(userData, fail = false){  
+
+  async signUp(userData, fail = false){
+
+    // Creates a new shopping list (only each time a new user is created)
+    const list = await ListAPI.createList()
+
+    // Appends the shopping list id to the form data
+    userData.append('shoppingList', list._id)
+
     const response = await fetch(`${App.apiBase}/user`, {
-      method: 'POST',      
+      method: 'POST',
       body: userData
     })
 
     // if response not ok
     if(!response.ok){      
       // console log error
-      const err = await response.json()
+      const err = await response.json() // SHOULD I DELETE A LIST IF NO USER IS CREATED?
       if(err) console.log(err)
       // show error      
       Toast.show(`Problem getting user: ${response.status}`)   
@@ -60,7 +68,14 @@ class Auth {
     // console.log(this.currentUser)           
     // redirect to home
     Router.init()
-    gotoRoute('/')
+
+    if(this.currentUser.newUser == true){
+      // redirect new users to guide page
+      gotoRoute('/guide')
+    }else{
+      // returning user redirect home page
+      gotoRoute('/')
+    }
   }
 
 
