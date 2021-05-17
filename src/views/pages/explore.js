@@ -5,7 +5,7 @@ import Auth from './../../Auth'
 import Utils from './../../Utils'
 import RecipeAPI from './../../RecipeAPI'
 
-class GuideView {
+class ExploreView {
   init(){
     document.title = 'Explore Recipes'  
     this.recipes = null  
@@ -24,21 +24,32 @@ class GuideView {
     }
   }
 
+  async addFavHandler(){    
+    try {
+      await UserAPI.addFavHaircut(this.id)
+      Toast.show('Haircut added to favourites')
+    }catch(err){
+      Toast.show(err, 'error')
+    }
+  }
+
   render(){
     const template = html`
       <va-app-header title="Explore Recipes" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
       <div class="page-content">
       ${this.recipes == null ? html`
             <sl-spinner></sl-spinner>
-        ` : html`        
+        ` : html`       
+        <div class="recipes-grid"> 
         ${this.recipes.map(recipe => html`
-          <va-recipe-card
+          <va-recipe-card class="recipe-card"
+          id=${recipe._id}
           title=${recipe.title}
           image=${recipe.image}
           >
           </va-recipe-card>
-          <p>${recipe._id}</p>
         `)}
+        </div>
         
         `}
       </div>
@@ -48,4 +59,4 @@ class GuideView {
 }
 
 
-export default new GuideView()
+export default new ExploreView()

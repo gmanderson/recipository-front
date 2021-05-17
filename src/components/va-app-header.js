@@ -3,6 +3,7 @@ import {anchorRoute, gotoRoute} from './../Router'
 import Auth from './../Auth'
 import App from './../App'
 import Router from './../Router'
+import CreateRecipe from './../views/pages/createRecipe'
 
 customElements.define('va-app-header', class AppHeader extends LitElement {
   constructor(){
@@ -66,18 +67,18 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         right: 0;
         left: 0;
         height: var(--app-header-height);
-        color: #fff;
+        color: #000;
         display: flex;
         z-index: 9;
         box-shadow: 4px 0px 10px rgba(0,0,0,0.2);
         align-items: center;
-      }
-      
+      }      
 
       .app-header-main {
         flex-grow: 1;
         display: flex;
         align-items: center;
+        font-family: var(--heading-font)
       }
 
       .app-header-main::slotted(h1){
@@ -90,7 +91,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         font-weight: bold;
         font-size: 1.2em;
         padding: .6em;
-        display: inline-block;        
+        display: inline-block;      
       }
 
       .app-logo img {
@@ -98,7 +99,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       }
       
       .hamburger-btn::part(base) {
-        color: #fff;
+        color: #000;
       }
 
       .app-top-nav {
@@ -111,7 +112,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         display: inline-block;
         padding: .8em;
         text-decoration: none;
-        color: #fff;
+        color: #000;
       }
       
       .app-side-menu-items a {
@@ -120,6 +121,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         text-decoration: none;
         font-size: 1.3em;
         color: #333;
+        font-family: var(--heading-font)
       }
 
       .app-side-menu-logo {
@@ -167,7 +169,13 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         ${(window.location.pathname == '/') ? html`
         <sl-input pill></sl-input>
         <sl-button pill>Search</sl-button>
-        <sl-button pill>Create Recipe</sl-button>
+        <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
+        ` : html``}
+
+        <!-- Displays if at createRecipe route -->
+        ${(window.location.pathname == '/createRecipe') ? html`
+        <!-- <sl-button pill class="create-btn" @click="${CreateRecipe.saveRecipe}">Save Recipe</sl-button> -->
+        <sl-button pill @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
         ` : html``}
 
         
@@ -178,7 +186,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
           
           </a>
           <sl-menu>            
-            <sl-menu-item @click="${() => gotoRoute('/profile')}">Profile</sl-menu-item>
+            <sl-menu-item @click="${() => gotoRoute('/account')}">Profile</sl-menu-item>
             <sl-menu-item @click="${() => gotoRoute('/editProfile')}">Edit Profile</sl-menu-item>
             <sl-menu-item @click="${() => Auth.signOut()}">Sign Out</sl-menu-item>
           </sl-menu>
@@ -187,7 +195,6 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
     </header>
 
     <sl-drawer class="app-side-menu" placement="left">
-      <img class="app-side-menu-logo" src="/images/logo.svg">
       <nav class="app-side-menu-items">
       <sl-avatar style="--size: 48px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
         <p>${this.user.firstName} ${this.user.lastName}</p>
@@ -197,6 +204,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <a href="/account" @click="${this.menuClick}">Account</a>
         <a href="#" @click="${() => Auth.signOut()}">Log Out</a>
       </nav>  
+      <h1>Recipository</h1>
     </sl-drawer>
     `
   }

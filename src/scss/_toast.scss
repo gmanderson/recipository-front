@@ -12,18 +12,22 @@
 }
 
 .toast-entry {  
-  background:#fff;
+  background: var(--brand-color-yellow);
   margin: 0 auto;
-  color: #333;  
-  border-radius: 200px;
+  color: #000;  
+  // border-radius: 200px;
+  font-family: var(--heading-font);
   box-shadow: 0px 3px 25px rgba(0,0,0,0.14);
-  padding: .7em 1.3em;
+  border-style: solid;
+  border-width: 4px;
+  border-color: var(--brand-color-red);
+  padding: .5em 3.3em;
   font-size: 1em;
   margin-bottom: .25em;
   text-align: center;
   transition: all .2 ease;
   &.is-error {
-    background: rgb(212, 25, 93);
-    color:#fff;
+    background: var(--brand-color-red);
+    color:#000;
   }  
 }

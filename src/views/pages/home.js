@@ -36,7 +36,7 @@ class HomeView {
         <h1 class="anim-in">Hey ${Auth.currentUser.firstName}</h1>
 
         <h3>Button example:</h3>
-        <sl-button class="anim-in" @click=${() => gotoRoute('/profile')}>View Profile</sl-button>
+        <sl-button class="anim-in" @click=${() => gotoRoute('/account')}>View Profile</sl-button>
         <p>&nbsp;</p>
         <h3>Link example</h3>
         <a href="/profile" @click=${anchorRoute}>View Profile</a>
@@ -47,6 +47,7 @@ class HomeView {
         ` : html`
         ${this.favRecipes.map(recipe => html`
           <va-recipe-card class="recipe-card"
+          id=${recipe._id}
           title=${recipe.title}
           image=${recipe.image}
           >

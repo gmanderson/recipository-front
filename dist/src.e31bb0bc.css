@@ -13,7 +13,7 @@
   --brand-color: #3cc6b9;
   --link-color: --brand-color;
   --app-header-height: 60px;
-  --app-header-txt-color: #fff;
+  --app-header-txt-color: #000;
   --app-header-title-font-size: 1.6em;
   --sl-color-primary-50: #f4f4f4;
   --sl-color-primary-100: #daf4f2;
@@ -41,6 +41,9 @@ body {
   font-weight: 300;
   background: var(--body-bg);
   height: 100vh;
+}
+body .marker-heading {
+  font-family: var(--heading-font);
 }
 
 h1, h2, h3, h5, h6 {
@@ -196,20 +199,23 @@ sl-dialog::part(title) {
 }
 
 .toast-entry {
-  background: #fff;
+  background: var(--brand-color-yellow);
   margin: 0 auto;
-  color: #333;
-  border-radius: 200px;
+  color: #000;
+  font-family: var(--heading-font);
   box-shadow: 0px 3px 25px rgba(0, 0, 0, 0.14);
-  padding: 0.7em 1.3em;
+  border-style: solid;
+  border-width: 4px;
+  border-color: var(--brand-color-red);
+  padding: 0.5em 3.3em;
   font-size: 1em;
   margin-bottom: 0.25em;
   text-align: center;
   transition: all 0.2 ease;
 }
 .toast-entry.is-error {
-  background: #d4195d;
-  color: #fff;
+  background: var(--brand-color-red);
+  color: #000;
 }
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */

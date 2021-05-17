@@ -46,7 +46,11 @@ class Router {
 	route(fullPathname){
 		// extract path without params
 		const pathname = fullPathname.split('?')[0]
+
 		const route = this.routes[pathname]
+
+		console.log(pathname)
+		console.log(route)
 		
 		if(route){
 			// if route exists, run init() of the view
@@ -58,6 +62,7 @@ class Router {
 	}
 
 	gotoRoute(pathname){
+		console.log(pathname)
 		window.history.pushState({}, pathname, window.location.origin + pathname);
 		this.route(pathname)
 	}	
