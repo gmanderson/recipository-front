@@ -135,7 +135,23 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       .page-title {
         color: var(--app-header-txt-color);
         margin-right: 0.5em;
+        margin-left: 0.5em;
         font-size: var(--app-header-title-font-size);
+      }
+
+      sl-button{
+        margin: 0.5em;
+
+      }
+
+      sl-button::part(base){
+        background-color: var(--brand-color-yellow);
+        border-color: var(--brand-color-grey);
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+      }
+
+      sl-input::part(base){
+        border-color: var(--brand-color-grey);
       }
 
       /* active nav links */
@@ -178,9 +194,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <sl-button pill @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
         ` : html``}
 
-        
-
-        <a href="/" @click="${anchorRoute}">Home</a>        
+              
         <sl-dropdown>
           <a slot="trigger" href="#" @click="${(e) => e.preventDefault()}">
           

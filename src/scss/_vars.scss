@@ -16,8 +16,10 @@
   $brand-color: #3cc6b9;
   $brand-color-red: #F65500;
   $brand-color-yellow: #F7D720;
+  $brand-color-grey: #707070;
   --brand-color-red: #{$brand-color-red};
   --brand-color-yellow: #{$brand-color-yellow};
+  --brand-color-grey: #{$brand-color-grey};
   --brand-color: #{$brand-color};
   --link-color: --brand-color;
   
@@ -40,4 +42,6 @@
   --sl-color-primary-800: #{darken($brand-color, 30%)};
   --sl-color-primary-900: #{darken($brand-color, 40%)};
   --sl-focus-ring-color-primary: #{rgba($brand-color, 0.1)};
+
+  --sl-input-font-family: var(--base-font-family);
 }

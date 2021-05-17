@@ -29,7 +29,8 @@ class SignInView {
     const template = html`      
       <div class="page-content page-centered">
         <div class="signinup-box">
-        <h1 class="brand-name">Recipository</h1>         
+        <h1 class="brand-name" id="brand-sign-in">Recipository</h1>
+        <div class="signinfields"> 
           <sl-form class="form-signup dark-theme" @sl-submit=${this.signInSubmitHandler}>          
             <div class="input-group">
               <sl-input name="email" type="email" placeholder="Email" required pill></sl-input>
@@ -41,9 +42,15 @@ class SignInView {
           </sl-form>
           <p>Not a member?</p>
           <sl-button class="" pill style="width: 100%;" type="primary" @click=${() => gotoRoute('/signup')}>Sign Up</sl-button>
-          <p>&#169; ${new Date().getFullYear()} Friendly Food Conglomerate</p>
+          </div>  
+
         </div>
+
       </div>
+      <div class="copyright">
+      <p>&#169; ${new Date().getFullYear()} Friendly Food Conglomerate</p>
+      </div>
+
     `
     render(template, App.rootEl)    
   }

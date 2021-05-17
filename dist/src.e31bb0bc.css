@@ -10,6 +10,7 @@
   --heading-font: "Permanent Marker", cursive;
   --brand-color-red: #F65500;
   --brand-color-yellow: #F7D720;
+  --brand-color-grey: #707070;
   --brand-color: #3cc6b9;
   --link-color: --brand-color;
   --app-header-height: 60px;
@@ -26,6 +27,7 @@
   --sl-color-primary-800: #18514c;
   --sl-color-primary-900: #0c2a27;
   --sl-focus-ring-color-primary: rgba(60, 198, 185, 0.1);
+  --sl-input-font-family: var(--base-font-family);
 }
 
 * {
@@ -131,23 +133,41 @@ a {
 .recipes-grid {
   display: flex;
   flex-wrap: wrap;
-  margin-left: 5%;
-  margin-right: 5%;
+  justify-content: space-around;
+  margin: 3em;
 }
 .recipes-grid .recipe-card {
-  width: calc(33.33% - 1em);
-  margin: 0.5em;
+  margin: 0;
+  padding: 10px;
 }
 
 .signinup-box,
 .signup-box {
-  max-width: 320px;
+  max-width: 620px;
   text-align: center;
 }
 
 .signinup-logo {
   width: 200px;
   margin-bottom: 1em;
+}
+
+.signinfields {
+  max-width: 320px;
+  margin: auto;
+  position: relative;
+}
+
+#brand-sign-in {
+  margin-bottom: 1em;
+}
+
+.copyright {
+  display: block;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
 }
 
 .guide-step {

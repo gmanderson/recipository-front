@@ -51,18 +51,19 @@ customElements.define('va-recipe-card', class RecipeCard extends LitElement {
 
       sl-card{
         --border-radius: 50px;
-        display: flex;
         text-align: center;
-        --padding: 0;
-
+        --padding: 0px;
+        margin-bottom: 4em;
       }
 
-      sl-card::body{
-        background: var(--brand-color-yellow);
+      sl-card::part(body){
+        background-color: var(--brand-color-yellow);
+        border-radius: 0px 0px 50px 50px;
       }
 
       .wrap{
         display: flex;
+        /* justify-content: space-around; */
       }
 
     </style>

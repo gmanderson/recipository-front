@@ -33,13 +33,13 @@ class HomeView {
       <va-app-header title="My Recipe Book" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
       
       <div class="page-content">
-        <h1 class="anim-in">Hey ${Auth.currentUser.firstName}</h1>
+        <!-- <h1 class="anim-in">Hey ${Auth.currentUser.firstName}</h1> -->
 
-        <h3>Button example:</h3>
+        <!-- <h3>Button example:</h3>
         <sl-button class="anim-in" @click=${() => gotoRoute('/account')}>View Profile</sl-button>
         <p>&nbsp;</p>
         <h3>Link example</h3>
-        <a href="/profile" @click=${anchorRoute}>View Profile</a>
+        <a href="/profile" @click=${anchorRoute}>View Profile</a> -->
         
       <div class="recipes-grid">
         ${this.favRecipes == null ? html`

@@ -108,31 +108,47 @@ a {
   font-family: var(--brand-font);
   font-size: 4.5em;
   color: var(--brand-color-red);
-  
 }
 
 .recipes-grid{
   display: flex;
   flex-wrap: wrap;
-  margin-left: 5%;
-  margin-right: 5%;
+  justify-content: space-around;
+  margin: 3em;
   .recipe-card{
-    width: calc(33.33% - 1em);
-    margin: 0.5em;
+    margin: 0;
+    padding: 10px;
   }
 }
 
 // sign in + sign up pages ----------
 .signinup-box,
 .signup-box {  
-  max-width: 320px;
+  max-width: 620px;
   text-align: center;
-
 }
 
 .signinup-logo {
   width: 200px;
   margin-bottom: 1em;
+}
+
+.signinfields{
+  max-width: 320px;
+  margin: auto;
+  position: relative;
+}
+
+#brand-sign-in{
+  margin-bottom: 1em;
+}
+
+.copyright{
+  display: block;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
 }
 
 // guide page ---------------
