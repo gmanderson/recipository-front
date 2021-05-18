@@ -4,6 +4,7 @@ import Auth from './../Auth'
 import App from './../App'
 import Router from './../Router'
 import CreateRecipe from './../views/pages/createRecipe'
+import Recipe from './../views/pages/recipe'
 
 customElements.define('va-app-header', class AppHeader extends LitElement {
   constructor(){
@@ -23,7 +24,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
   firstUpdated(){
     super.firstUpdated()
-    this.navActiveLinks()    
+    this.navActiveLinks()
   }
 
   navActiveLinks(){	
@@ -35,6 +36,18 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         navLink.classList.add('active')
       }
     })
+
+    // Sets local storage name of page visited before individual recipe
+    if(window.location.pathname == '/') {
+      localStorage.setItem('previousName', 'My Recipe Book')
+      localStorage.setItem('previousPath', '/')
+    }
+    if(window.location.pathname == '/explore') {
+      localStorage.setItem('previousName', 'Explore Recipes')
+      localStorage.setItem('previousPath', '/explore')
+    }
+
+
   }
 
   hamburgerClick(){  
@@ -52,6 +65,25 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       // goto route after menu is hidden
       gotoRoute(pathname)
     })
+  }
+
+  logOutConfirmation(){
+    const logoutDialog = this.shadowRoot.querySelector('.logout-dialog')
+    logoutDialog.show()
+
+    const closeBtn = this.shadowRoot.querySelector('.close-btn')
+    closeBtn.addEventListener('click', () => logoutDialog.hide())
+  }
+
+  // BUTTON DOES NOT YET UPDATE
+  changeCollectRemoveButton(){
+    if(localStorage.getItem('isCollected') === 'true'){
+      this.collectRemoveBtn = 'Remove Recipe'
+    }else{
+      this.collectRemoveBtn = 'Collect Recipe'
+    }
+      Recipe.collectRemoveRecipe()
+      this.render()
   }
 
   render(){    
@@ -183,7 +215,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       <nav class="app-top-nav">
         <!-- Displays if at home route -->
         ${(window.location.pathname == '/') ? html`
-        <sl-input pill></sl-input>
+        <sl-input clearable pill></sl-input>
         <sl-button pill>Search</sl-button>
         <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
         ` : html``}
@@ -191,8 +223,16 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <!-- Displays if at createRecipe route -->
         ${(window.location.pathname == '/createRecipe') ? html`
         <!-- <sl-button pill class="create-btn" @click="${CreateRecipe.saveRecipe}">Save Recipe</sl-button> -->
+        <sl-button class="create-btn" pill @click=${() => CreateRecipe.submitForm()}>Save Recipe</sl-button>
         <sl-button pill @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
         ` : html``}
+
+
+
+        ${(window.location.pathname == '/recipe') ? html`
+          <sl-button pill @click="${() => this.changeCollectRemoveButton()}">Collect Recipe</sl-button>
+          <sl-button pill @click="${() => gotoRoute(localStorage.getItem('previousPath'))}">Back to ${localStorage.getItem('previousName')}</sl-button>
+      ` : html``}
 
               
         <sl-dropdown>
@@ -208,6 +248,8 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       </nav>
     </header>
 
+
+
     <sl-drawer class="app-side-menu" placement="left">
       <nav class="app-side-menu-items">
       <sl-avatar style="--size: 48px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
@@ -216,10 +258,19 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <a href="/explore" @click="${this.menuClick}">Explore Recipes</a>
         <a href="/shoppingList" @click="${this.menuClick}">Shopping List</a>
         <a href="/account" @click="${this.menuClick}">Account</a>
-        <a href="#" @click="${() => Auth.signOut()}">Log Out</a>
+        <!-- <a href="#" @click="${() => Auth.signOut()}">Log Out</a> -->
+        <a href="#" @click="${() => this.logOutConfirmation()}">Log Out</a>
       </nav>  
       <h1>Recipository</h1>
     </sl-drawer>
+
+    <sl-dialog class="logout-dialog" no-header="true">Are you sure you want to log out?
+      <div>
+      <sl-button @click="${() => Auth.signOut()}">Log Out</sl-button>
+      <sl-button class="close-btn">Close</sl-button>
+      </div>
+    </sl-dialog>
+
     `
   }
   

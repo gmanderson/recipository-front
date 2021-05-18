@@ -76,51 +76,28 @@ class RecipeAPI {
         return data
   }
 
-  // async createList(){
-  //   const response = await fetch(`${App.apiBase}/list`, {
-  //     method: 'POST'
-  //   })
+ async deleteRecipe(recipeID){
+    const response = await fetch(`${App.apiBase}/recipe/${recipeID}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'}
+    })
 
-  //     // if response not ok
-  //     if(!response.ok){ 
-  //       // console log error
-  //       const err = await response.json()
-  //       if(err) console.log(err)
-  //       // throw error (exit this function)      
-  //       throw new Error('Problem creating list')
-  //     }
+      // if response not ok
+      if(!response.ok){ 
+        // console log error
+        const err = await response.json()
+        if(err) console.log(err)
+        // throw error (exit this function)      
+        throw new Error('Problem deleting recipe')
+      }
       
-  //     // convert response payload into json - store as data
-  //     const data = await response.json()
+      // convert response payload into json - store as data
+      const data = await response.json()
       
-  //     // return data
-  //     return data
-  // }
+      // return data
+      return data
+ }
 
-  // async getUser(userId){
-  //   // validate
-  //   if(!userId) return
-    
-  //   // fetch the json data
-  //   const response = await fetch(`${App.apiBase}/user/${userId}`, {
-  //     headers: { "Authorization": `Bearer ${localStorage.accessToken}`}
-  //   })
-
-  //   // if response not ok
-  //   if(!response.ok){ 
-  //     // console log error
-  //     const err = await response.json()
-  //     if(err) console.log(err)
-  //     // throw error (exit this function)      
-  //     throw new Error('Problem getting user')
-  //   }
-    
-  //   // convert response payload into json - store as data
-  //   const data = await response.json()
-    
-  //   // return data
-  //   return data
-  // }
 }
 
 export default new RecipeAPI()

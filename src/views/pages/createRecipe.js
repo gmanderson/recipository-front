@@ -5,6 +5,7 @@ import Auth from './../../Auth'
 import Utils from './../../Utils'
 import RecipeAPI from '../../RecipeAPI'
 import Toast from './../../Toast'
+import UserAPI from './../../UserAPI'
 
 class CreateRecipeView {
   init(){
@@ -14,8 +15,8 @@ class CreateRecipeView {
   }
 
   async saveRecipe(e){
-    const createBtn = document.querySelector('.create-btn')
-    createBtn.setAttribute('loading', '')   
+    // const createBtn = document.querySelector('.create-btn')
+    // createBtn.setAttribute('loading', '')   
     const formData = e.detail.formData
 
     let jsonObject = {}
@@ -26,9 +27,9 @@ class CreateRecipeView {
     console.log(jsonObject)
 
     try{
-      await RecipeAPI.newRecipe(formData)
+      const newRecipe = await RecipeAPI.newRecipe(formData)
       Toast.show('Recipe added')
-      createBtn.removeAttribute('loading') 
+      // createBtn.removeAttribute('loading') 
       // reset form
       // text & text area fields
       const textInputs = document.querySelectorAll('sl-input, sl-textarea')
@@ -38,14 +39,27 @@ class CreateRecipeView {
       // const fileInput = document.querySelector('input[type=file]')
       // if(fileInput) fileInput.value = null
 
+      // Add recipe to user collection
+      try{
+        await UserAPI.collectRecipe(newRecipe._id)
+        Toast.show('Recipe collected')
+      }catch(err){
+        Toast.show(err, 'error')
+      }
+
+      // Return to recipe book
+      gotoRoute('/')
+
     }catch(err){
       Toast.show(err, 'error')
-      createBtn.removeAttribute('loading') 
+      // createBtn.removeAttribute('loading') 
     }
   }
 
-  displayImage(){
-    console.log("HELLO")
+  // Triggers submission of form
+  submitForm(){
+    const submitSL = document.querySelector('sl-form');
+    submitSL.submit();
   }
 
   render(){
@@ -80,7 +94,6 @@ class CreateRecipeView {
           <sl-textarea name="directions" type="text" label="Directions" pill></sl-textarea>
 
           <sl-textarea name="notes" type="text" label="Notes" pill></sl-textarea>
-          <sl-button class="create-btn" pill submit>Save Recipe</sl-button>
         </sl-form>
         
       </div>      

@@ -71,6 +71,68 @@ class UserAPI {
     // return data
     return data
   }
+
+  async collectRecipe(recipeId){
+    // validate
+    if(!recipeId) return
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/user/collectRecipe`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'},
+      body: JSON.stringify({recipeId: recipeId})
+    })
+
+    // if response not ok
+    if(!response.ok){ 
+      // console log error
+      const err = await response.json()
+      if(err) console.log(err)
+      // throw error (exit this function)      
+      throw new Error('Problem collecting recipe')
+    }
+    
+    // convert response payload into json - store as data
+    const data = await response.json()
+    
+    // return data
+    return data
+
+  }
+
+  async removeRecipe(recipeId){
+    // validate
+    if(!recipeId) return
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/user/removeRecipe`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'},
+      body: JSON.stringify({recipeId: recipeId})
+    })
+
+    // if response not ok
+    if(!response.ok){ 
+      // console log error
+      const err = await response.json()
+      if(err) console.log(err)
+      // throw error (exit this function)      
+      throw new Error('Problem collecting recipe')
+    }
+    
+    // convert response payload into json - store as data
+    const data = await response.json()
+    
+    // return data
+    return data
+
+  }
+
+
+
+
 }
+
+
 
 export default new UserAPI()
