@@ -10,17 +10,18 @@ import ListAPI from './../../ListAPI'
 
 class RecipeView {
   init(){
-    let recipeID = location.search.substring(1).split('=')[1]
-    console.log(recipeID)
+
+    // console.log(recipeID)
     this.render()
     Utils.pageIntroAnim()
-    this.getRecipeByID(recipeID)   
+    this.getRecipeByID()   
 
   }
 
-  async getRecipeByID(id){
+  async getRecipeByID(){
     try{
-      this.recipe = await RecipeAPI.getRecipeByID(id)
+      let recipeID = location.search.substring(1).split('=')[1]
+      this.recipe = await RecipeAPI.getRecipeByID(recipeID)
       console.log(this.recipe)
       document.title = this.recipe.title
       this.render()
@@ -79,6 +80,30 @@ class RecipeView {
     }
   }
 
+  scaleDialog(){
+    const scaleDialog = document.querySelector('.scale-servings')
+    scaleDialog.show()
+  }
+
+  async scaleServes(){
+    // Reset all to original quantities
+    await this.getRecipeByID()
+
+
+    let scaledQuantity = document.querySelector('.scale-input').value
+
+    this.recipe.servings = this.recipe.servings * scaledQuantity
+    this.recipe.ingredients.map(ingredient => {
+    ingredient.quantity = ingredient.quantity * scaledQuantity})
+
+    document.querySelector('.scale-input').value = ''
+    document.querySelector('.scale-servings').hide()
+    
+    this.render()
+
+
+  }
+
   render(){
     const template = html`
       <va-app-header title="${localStorage.getItem('previousName')}" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
@@ -97,7 +122,7 @@ class RecipeView {
           <p>Cook Time: ${this.recipe.cookTime}</p>
           <p>Servings: ${this.recipe.servings}</p>
 
-          <sl-button>Scale Serves</sl-button>
+          <sl-button @click="${() => this.scaleDialog()}">Scale Serves</sl-button>
           </div>
 
           <div class="recipe-ingredients">
@@ -123,6 +148,11 @@ class RecipeView {
         
         `}
       </div>
+      <sl-dialog class="scale-servings">
+        <sl-input pill class="scale-input"></sl-input>
+        <sl-button pill @click="${() => this.scaleServes()}">Scale</sl-button>
+        <sl-button pill>Cancel</sl-button>
+      </sl-dialog>
     `
     render(template, App.rootEl)
   }
