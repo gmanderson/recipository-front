@@ -30,12 +30,48 @@ class ShoppingListView {
   }
 
   printList(){
+    let items = document.querySelector('.list-items')
+    while(items.firstChild){
+      items.removeChild(items.firstChild)
+    }
     this.list.items.forEach(item => {
       let itemPlace = document.createElement("p")
       let itemText = document.createTextNode(item)
       itemPlace.appendChild(itemText)
       document.querySelector('.list-items').appendChild(itemPlace)
     })
+  }
+
+  openAddItemDialog(){
+    document.querySelector('.add-item-dialog').show()
+  }
+
+  async addItem(){
+    let addItemText = document.querySelector('.add-item-input').value
+    console.log(addItemText)
+
+    const currentUser = await UserAPI.getUser(Auth.currentUser._id)
+    const listId = currentUser.shoppingList._id
+    ListAPI.addItemsToList(listId, addItemText)
+
+    document.querySelector('.add-item-input').value = ''
+    document.querySelector('.add-item-dialog').hide()
+
+    this.getItems()
+  }
+
+  clearListDialog(){
+    document.querySelector('.clear-list-dialog').show()
+  }
+
+  async clearList(){
+    const currentUser = await UserAPI.getUser(Auth.currentUser._id)
+    const listId = currentUser.shoppingList._id
+    ListAPI.clearList(listId)
+
+    document.querySelector('.clear-list-dialog').hide()
+
+    this.getItems()
   }
 
   render(){
@@ -49,7 +85,18 @@ class ShoppingListView {
         ${this.printList()}
         `
       }  
-      </div>      
+      </div>
+      <sl-dialog label="Add Item" class="add-item-dialog">
+        <sl-input class="add-item-input"></sl-input>
+        <sl-button @click="${() => this.addItem()}">Add</sl-button>
+        <sl-button>Cancel</sl-button>
+      </sl-dialog>   
+      
+      <sl-dialog label="Clear List" class="clear-list-dialog">
+        <p>Are you sure you want to clear the list?</p>
+        <sl-button @click="${() => this.clearList()}">Clear</sl-button>
+        <sl-button>Cancel</sl-button>
+      </sl-dialog>   
     `
     render(template, App.rootEl)
   }

@@ -42,11 +42,12 @@ class EditProfileView {
       Toast.show(err, 'error')
     }
     submitBtn.removeAttribute('loading')
+    gotoRoute('/account')
   }
 
   render(){
     const template = html`
-      <va-app-header title="Edit Profile" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
+      <va-app-header title="Account" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
       <div class="page-content">        
         ${(this.user == null) ? html`
           <sl-spinner></sl-spinner>
@@ -54,16 +55,19 @@ class EditProfileView {
           <p>Updated: ${moment(Auth.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a')}</p>
           <sl-form class="page-form" @sl-submit=${this.updateProfileSubmitHandler.bind(this)}>
             <div class="input-group">
+              <p>First Name</p>
               <sl-input type="text" name="firstName" value="${this.user.firstName}" placeholder="First Name"></sl-input>
             </div>
             <div class="input-group">
+            <p>Last Name</p>
               <sl-input type="text" name="lastName" value="${this.user.lastName}" placeholder="Last Name"></sl-input>
             </div>
             <div class="input-group">
+            <label>Email Address</label>
               <sl-input type="text" name="email" value="${this.user.email}" placeholder="Email Address"></sl-input>
             </div>            
             <div class="input-group">
-              <label>Avatar</label><br>          
+              <label>Profile Picture</label><br>          
               ${(this.user.avatar) ? html`
                 <sl-avatar image="${App.apiBase}/images/${this.user.avatar}"></sl-avatar>
                 <input type="file" name="avatar" />
@@ -71,7 +75,8 @@ class EditProfileView {
                 <input type="file" name="avatar" />
               `}
             </div>
-            <sl-button type="primary" class="submit-btn" submit>Update Profile</sl-button>
+            <sl-button type="primary" class="submit-btn" submit>Confirm</sl-button>
+            <sl-button type="primary" @click="${() => gotoRoute('/account')}">Cancel</sl-button>
           </sl-form>
         `}
       </div>

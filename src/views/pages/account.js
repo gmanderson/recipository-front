@@ -39,7 +39,7 @@ class ProfileView {
         
         <p>Updated: ${moment(Auth.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a')}</p>
 
-        <sl-button @click=${()=> gotoRoute('/editProfile')}>Edit Profile</sl-button>
+        <sl-button @click=${()=> gotoRoute('/editProfile')}>Edit Details</sl-button>
         <sl-button @click=${()=> gotoRoute('/changePassword')}>Change Password</sl-button>
         <sl-button @click=${()=> this.subscriptionDialog()}>Subscription Level</sl-button>
         <sl-button @click=${()=> this.closeAccountDialog()}>Close Account</sl-button>

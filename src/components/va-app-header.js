@@ -5,6 +5,7 @@ import App from './../App'
 import Router from './../Router'
 import CreateRecipe from './../views/pages/createRecipe'
 import Recipe from './../views/pages/recipe'
+import ShoppingList from './../views/pages/shoppingList'
 
 customElements.define('va-app-header', class AppHeader extends LitElement {
   constructor(){
@@ -225,6 +226,12 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <!-- <sl-button pill class="create-btn" @click="${CreateRecipe.saveRecipe}">Save Recipe</sl-button> -->
         <sl-button class="create-btn" pill @click=${() => CreateRecipe.submitForm()}>Save Recipe</sl-button>
         <sl-button pill @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
+        ` : html``}
+
+        <!-- Displays if at shopping list route -->
+        ${(window.location.pathname == '/shoppingList') ? html`
+        <sl-button class="" pill @click=${() => ShoppingList.openAddItemDialog()}>Add Item</sl-button>
+        <sl-button class="" pill @click=${() => ShoppingList.clearListDialog()}>Clear List</sl-button>
         ` : html``}
 
 

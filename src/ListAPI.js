@@ -34,6 +34,19 @@ class ListAPI {
       body: JSON.stringify({items: ingredientsList})
     })
   }
+
+  // 
+  async clearList(listId){
+    const response = await fetch(`${App.apiBase}/list/clearList/${listId}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'}
+    })
+
+  }
+
+
+
+
 }
 
 export default new ListAPI()
