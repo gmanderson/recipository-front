@@ -6,6 +6,8 @@ import Router from './../Router'
 import CreateRecipe from './../views/pages/createRecipe'
 import Recipe from './../views/pages/recipe'
 import ShoppingList from './../views/pages/shoppingList'
+import RecipeBook from './../views/pages/home'
+import Explore from './../views/pages/explore'
 
 customElements.define('va-app-header', class AppHeader extends LitElement {
   constructor(){
@@ -85,6 +87,17 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
     }
       Recipe.collectRemoveRecipe()
       this.render()
+  }
+
+  searchTerm(){
+    let searchTerm = this.shadowRoot.querySelector('.search-input').value
+
+    if (window.location.pathname == '/'){
+      RecipeBook.searchRecipes(searchTerm)
+    }else{
+      Explore.searchRecipes(searchTerm)
+    }
+
   }
 
   render(){    
@@ -247,9 +260,15 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       <nav class="app-top-nav">
         <!-- Displays if at home route -->
         ${(window.location.pathname == '/') ? html`
-        <sl-input clearable pill></sl-input>
-        <sl-button pill>Search</sl-button>
+        <sl-input class="search-input" clearable @sl-clear="${()=>RecipeBook.getFavRecipes()}" pill></sl-input>
+        <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
         <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
+        ` : html``}
+
+        <!-- Displays if at explore route -->
+        ${(window.location.pathname == '/explore') ? html`
+        <sl-input class="search-input" clearable @sl-clear="${() => Explore.getCompanyRecipes()}" pill></sl-input>
+        <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
         ` : html``}
 
         <!-- Displays if at createRecipe route -->

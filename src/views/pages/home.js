@@ -28,6 +28,22 @@ class HomeView {
     }
   }
 
+  async searchRecipes(searchTerm){
+    console.log(searchTerm)
+    // Get fresh results to search
+    const currentUser = await UserAPI.getUser(Auth.currentUser._id)
+    this.favRecipes = currentUser.recipes
+
+    console.log(this.favRecipes)
+
+    let searchResult = this.favRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    this.favRecipes = searchResult
+    console.log(this.favRecipes)
+    console.log(this.favRecipes.title)
+    this.render()
+  }
+
   render(){
     const template = html`
       <va-app-header title="My Recipe Book" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
