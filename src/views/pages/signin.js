@@ -26,7 +26,19 @@ class SignInView {
   }
 
   render(){    
-    const template = html`      
+    const template = html`
+    <!-- <va-background title="1"></va-background>  -->
+
+      <div class="background">
+        <div class="left-images">
+          <img src="./../../images/background/prawn.jpg">
+          <img src="./../../images/background/kiwi.jpg">
+          <img src="./../../images/background/capsicum.jpg">
+          <img src="./../../images/background/lime.jpg">
+        </div>
+      </div>
+
+
       <div class="page-content page-centered">
         <div class="signinup-box">
         <h1 class="brand-name" id="brand-sign-in">Recipository</h1>

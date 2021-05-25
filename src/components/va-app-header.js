@@ -89,6 +89,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
   render(){    
     return html`
+
     <style>      
       * {
         box-sizing: border-box;
@@ -133,7 +134,24 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       
       .hamburger-btn::part(base) {
         color: #000;
+        font-size: 150%;
       }
+
+      sl-drawer::part(body){
+        background-color: var(--brand-color-yellow);
+      }
+      sl-drawer::part(header){
+        background: linear-gradient(var(--brand-color-red), var(--brand-color-yellow));
+      }
+
+      sl-avatar{
+        position: relative;
+        margin-left: 37%;
+
+      }
+      /* sl-icon-button button.icon-button::part(base){
+        font-size: 150%;
+      } */
 
       .app-top-nav {
         display: flex;
@@ -154,6 +172,12 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         text-decoration: none;
         font-size: 1.3em;
         color: #333;
+        font-family: var(--heading-font)
+      }
+
+      .app-side-menu-items p {
+        text-align: center;
+        font-size: 1.5rem;
         font-family: var(--heading-font)
       }
 
@@ -185,6 +209,13 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
       sl-input::part(base){
         border-color: var(--brand-color-grey);
+      }
+
+      .logo-bottom{
+        /* position: fixed;
+        bottom: 0px; */
+        font-family: var(--brand-font);
+        color: var(--brand-color-red);
       }
 
       /* active nav links */
@@ -259,16 +290,17 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
     <sl-drawer class="app-side-menu" placement="left">
       <nav class="app-side-menu-items">
-      <sl-avatar style="--size: 48px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
+      <sl-avatar style="--size: 101px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
         <p>${this.user.firstName} ${this.user.lastName}</p>
         <a href="/" @click="${this.menuClick}">My Recipe Book</a>
+        <i class="fas fa-book"></i>
         <a href="/explore" @click="${this.menuClick}">Explore Recipes</a>
         <a href="/shoppingList" @click="${this.menuClick}">Shopping List</a>
         <a href="/account" @click="${this.menuClick}">Account</a>
         <!-- <a href="#" @click="${() => Auth.signOut()}">Log Out</a> -->
         <a href="#" @click="${() => this.logOutConfirmation()}">Log Out</a>
       </nav>  
-      <h1>Recipository</h1>
+      <h1 class="logo-bottom">Recipository</h1>
     </sl-drawer>
 
     <sl-dialog class="logout-dialog" no-header="true">Are you sure you want to log out?

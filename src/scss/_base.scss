@@ -199,6 +199,51 @@ a {
   grid-area: directions;
 }
 
+// account page
+.account-grid{
+  display: grid;
+  grid-template-areas: "avatar name name name"
+  "info info info buttons";
+  margin-top: 5%;
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.account-item-avatar{
+  grid-area: avatar;
+  text-align: left;
+
+}
+.account-item-name{
+  grid-area: name;
+  text-align: left;
+  padding-top: 70px;
+  padding-left: 20px;
+}
+.account-item-info{
+  grid-area: info;
+  text-align: left;
+  .info-title, .info-details{
+    display: inline-block;
+    margin-left: 20px;
+  }
+  .info-details{
+    margin-left: 30%;
+  }
+}
+.account-item-buttons{
+  grid-area: buttons;
+  margin-left: auto;
+}
+
+.account-btn{
+  display: block;
+  grid-area: buttons;
+  width: 207px;
+  margin-bottom: 30px;
+}
+
 // RESPONSIVE - MOBILE -------------------
 @media all and (max-width: 768px){ 
 
