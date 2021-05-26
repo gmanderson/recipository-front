@@ -73,9 +73,19 @@ a {
   color: var(--brand-color);
 }
 
+.alt-create-btn{
+  display: none;
+}
+
 // all dialogs
 sl-dialog::part(base){
   text-align: center;
+}
+
+.close-account{
+  sl-button.red-btn::part(base){
+    background-color: var(--brand-color-red);
+  }
 }
 
 sl-dialog{
@@ -597,4 +607,327 @@ sl-textarea::part(base){
     width: 90%;
     max-width: none;
   }
+
+  .brand-name{
+    font-size: 2em;
+  }
+
+  .alt-create-btn{
+    display: block;
+    sl-button{
+      width:100%;
+    }
+
+  }
+
+ 
+  // .page-content{
+  //   background-color: #fff;
+  // }
+  .form-container{
+    display: block;
+    // grid-template-rows: 1fr 1fr;
+    // margin-bottom: 20px;
+  }
+  
+  .signup-left{
+    grid-row: 1/2;
+    sl-input, sl-select{
+      margin-right: 0px;
+    }
+  }
+  
+  .signup-right{
+    grid-row: 2/3;
+    sl-input{
+      margin-left: 0px;
+    }
+  }
+
+
+  // recipe page
+.recipe-sheet{
+  width: 100%;
+  background-color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas: 
+  "brief"
+  "images"
+  "ingredients"
+  "directions";
+}
+
+.ingredient-heading-button{
+  display: inline-block;
+}
+
+.recipe-image{
+  img{
+    width: 100%;
+    margin: 0em;
+  }
+}
+
+.recipe-brief{
+  margin: 1em;
+  sl-button{
+    width: 100%;
+  }
+}
+
+.recipe-ingredients{
+  margin: 1em;
+  ul{
+    list-style: none;
+    margin-left: -2.5em;
+  }
+  .marker-heading{
+    margin-right: 20px;
+  }
+}
+
+.recipe-directions{
+  margin: 1em;
+}
+
+// list page
+.list-sheet{
+  width: 100%;
+  background-color: #fff;
+  padding-left: 10px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+}
+.item{
+  display: inline-block;
+  margin-right: 10px;
+  p{
+    display: inline;
+    overflow-wrap:break-word;
+  }
+}
+
+
+// create recipe page
+.create-sheet{
+  width: 100%;
+  background-color: #fff;
+  border-width: 2px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  .create-heading{
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    font-size: 1.5em;
+    text-align: center;
+  }
+}
+
+.create-grid{
+  display: grid;
+  grid-template-columns: none;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+  "left-area-top"
+  "left-area-bottom"
+  "right-area-bottom"
+  "right-area-top";
+}
+
+.create-left-top{
+  margin-left: 1em;
+}
+
+.create-left-bottom{
+  margin-left: 1em;
+  margin-bottom: 0em;
+}
+
+.create-right-top{
+  margin-left: 1em;
+  margin-right: 1em;
+  img{
+    width: 100%;
+  }
+}
+
+.add-remove-btns{
+  margin-left: 10px;
+  margin-right: 25px;
+
+}
+
+.add-remove-text{
+  display: inline;
+  margin-left: 15px;
+}
+
+.create-right-bottom{
+  margin-left: 1em;
+  margin-right: 1em;
+  sl-textarea{
+    margin-bottom: 30px;
+  }
+}
+
+.ingredient-field{
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  margin-right: 17px;
+  margin-bottom: 8px;
+
+}
+.ingredient-name-field{
+  width: 165px;
+}
+
+sl-textarea::part(base){
+  border-radius: 25px;
+}
+
+.create-brief-details{
+  display: block;
+  margin: 0;
+  p{
+    width: 150px;
+  }
+  sl-input{
+    width: 95%;
+  }
+}
+
+.image-selector{
+  display: block;
+
+  sl-button{
+    position: relative;
+    width: 100%;
+    right:0;
+    margin-bottom: 2em;
+  }
+}
+
+// account page
+.account-grid{
+  grid-template-areas: "avatar" 
+  "name"
+  "info"
+  "buttons";
+  margin-top: 0;
+  width: 100%;
+}
+
+.account-item-avatar{
+  text-align: center;
+}
+.account-item-name{
+  grid-area: name;
+  text-align: center;
+  padding-top: 0px;
+  padding-left: 0px;
+}
+.account-item-info{
+  text-align: left;
+  background-color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-style: solid;
+  border-color: var(--brand-color-red);
+  .marker-heading, .info-details{
+    display: block;
+  }
+  .info-details{
+    margin-left: 0px;
+  }
+
+}
+.account-item-buttons{
+  margin-left: 0;
+  margin-top: 1em;
+}
+
+.account-btn{
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.account-edit{
+  background-color: #fff;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-style: solid;
+  border-color: var(--brand-color-red);
+  margin-top: 1em;
+  margin-bottom: 1em;
+    .submit-btn, .cancel-btn{
+      width: 100%;
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+}
+
+.input-group{
+  sl-input, p, sl-select{
+    display: inline-block;
+  }
+  p{
+    width: 200px;
+  }
+  sl-input{
+    width: 100%;
+  }
+  sl-select{
+    width: 100%;
+  }
+}
+
+// all dialogs
+sl-dialog::part(base){
+  text-align: center;
+}
+
+sl-dialog{
+  sl-button{
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 20px;
+    width: 100%;
+  }
+}
+
+// guide page ---------------
+.guide-step {
+  background-color: #fff;
+  padding: 0em;
+  margin: 0em;
+  margin-top: -4em;
+  max-width: 850px;
+  .brand-name{
+    font-size: 1.5em;
+    margin-bottom: 0;
+    margin-top: 1em;
+  }
+  h1{
+    font-size: 1.5em;
+    text-align: center;
+
+  }
+  .fas{
+    font-size: 1em;
+  }
+}
+
 }

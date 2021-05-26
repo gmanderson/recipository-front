@@ -11,6 +11,7 @@ class SignInView {
     document.title = 'Sign In'
     this.render()
     Utils.pageIntroAnim()
+    Utils.backgroundAnim()
   }
 
   signInSubmitHandler(e){

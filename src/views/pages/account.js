@@ -15,6 +15,7 @@ class ProfileView {
     document.title = 'Account'    
     this.render()    
     Utils.pageIntroAnim()
+
   }
 
   subscriptionDialog(){
@@ -143,8 +144,9 @@ class ProfileView {
                   </sl-select>
               </div> 
               <sl-button pill type="primary" class="submit-btn" submit>Confirm</sl-button>
+              <sl-button pill @click="${() => document.querySelector('.subscription').hide()}">Cancel</sl-button>
           </sl-form>
-        <sl-button pill @click="${() => document.querySelector('.subscription').hide()}">Cancel</sl-button>
+
         </sl-dialog>
       </div>      
     `

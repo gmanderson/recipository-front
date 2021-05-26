@@ -13,8 +13,8 @@ class HomeView {
     document.title = 'Home' 
     this.favRecipes = null   
     this.render()    
-    Utils.pageIntroAnim()    
     this.getFavRecipes()
+    Utils.recipeCardsAnim()  
   }
 
   async getFavRecipes(){
@@ -53,13 +53,14 @@ class HomeView {
       <va-app-header title="My Recipe Book" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
       
       <div class="page-content">
-        <!-- <h1 class="anim-in">Hey ${Auth.currentUser.firstName}</h1> -->
 
-        <!-- <h3>Button example:</h3>
-        <sl-button class="anim-in" @click=${() => gotoRoute('/account')}>View Profile</sl-button>
-        <p>&nbsp;</p>
-        <h3>Link example</h3>
-        <a href="/profile" @click=${anchorRoute}>View Profile</a> -->
+      <div class="alt-create-btn">
+      ${(Auth.currentUser.accessLevel == 2) ? html `
+        <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
+        ` : html`
+        <sl-button pill @click="${() => document.querySelector('va-app-header').shadowRoot.querySelector('.no-access-dialog').show()}">Create Recipe</sl-button>
+        `}
+        </div>
         
       <div class="recipes-grid">
         ${this.favRecipes == null ? html`

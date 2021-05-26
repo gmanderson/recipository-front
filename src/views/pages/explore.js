@@ -10,8 +10,8 @@ class ExploreView {
     document.title = 'Explore Recipes'  
     this.recipes = null  
     this.render()    
-    Utils.pageIntroAnim()
     this.getCompanyRecipes()
+    Utils.recipeCardsAnim() 
   }
 
   async getCompanyRecipes(){
@@ -62,10 +62,11 @@ class ExploreView {
     
       <va-app-header title="Explore Recipes" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
       <div class="page-content">
+      <div class="recipes-grid"> 
       ${this.recipes == null ? html`
             <sl-spinner></sl-spinner>
         ` : html`       
-        <div class="recipes-grid"> 
+
         ${this.recipes.map(recipe => html`
           <va-recipe-card class="recipe-card"
           id=${recipe._id}

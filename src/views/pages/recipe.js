@@ -15,7 +15,6 @@ class RecipeView {
     this.render()
     Utils.pageIntroAnim()
     this.getRecipeByID()   
-
   }
 
   async getRecipeByID(){
@@ -31,6 +30,7 @@ class RecipeView {
   }
 
   async collectRemoveRecipe(){
+    Utils.recipeSheetAnim()
     const currentUser = await UserAPI.getUser(Auth.currentUser._id)
     console.log(currentUser.recipes)
 

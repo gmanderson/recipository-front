@@ -11,7 +11,8 @@ class CreateRecipeView {
   init(){
     document.title = 'Create Recipe'
     this.render()    
-    Utils.pageIntroAnim()
+    // Utils.pageIntroAnim()
+    Utils.createSheetAnim()
   }
 
   async saveRecipe(e){
@@ -150,8 +151,8 @@ class CreateRecipeView {
           </div>
 
           <div>
-          <sl-button @click="${() => this.addIngredientLine()}" class="add-remove-btns" circle size="small">+</sl-button>
-          <sl-button @click="${() => this.removeIngredientLine()}" class="add-remove-btns" circle size="small">-</sl-button>
+          <sl-button @click="${() => this.addIngredientLine()}" class="add-remove-btns green-btn" circle size="small">+</sl-button>
+          <sl-button @click="${() => this.removeIngredientLine()}" class="add-remove-btns red-btn" circle size="small">-</sl-button>
           <p class=add-remove-text>Add/Remove Line</p>
           </div>
 

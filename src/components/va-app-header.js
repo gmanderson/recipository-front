@@ -90,9 +90,6 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
   noAccessDialog(){
     const noAccessDialog = this.shadowRoot.querySelector('.no-access-dialog')
     noAccessDialog.show()
-
-    const closeBtn = this.shadowRoot.querySelector('.access-close-btn')
-    closeBtn.addEventListener('click', () => noAccessDialog.hide())
   }
 
   render(){    
@@ -159,9 +156,6 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         margin-left: 37%;
 
       }
-      /* sl-icon-button button.icon-button::part(base){
-        font-size: 150%;
-      } */
 
       .app-top-nav {
         display: flex;
@@ -260,9 +254,15 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
       /* RESPONSIVE - MOBILE ------------------- */
       @media all and (max-width: 768px){       
-        
-        .app-top-nav {
+        .app-header{
+          height: calc(var(--app-header-height));
+        }
+        .app-header-main{
           display: none;
+        }
+
+        .back-to-btn{
+          display:none;
         }
       }
 
@@ -300,9 +300,8 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
         <!-- Displays if at createRecipe route -->
         ${(window.location.pathname == '/createRecipe') ? html`
-        <!-- <sl-button pill class="create-btn" @click="${CreateRecipe.saveRecipe}">Save Recipe</sl-button> -->
         <sl-button class="create-btn" pill @click=${() => CreateRecipe.submitForm()}>Save Recipe</sl-button>
-        <sl-button pill @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
+        <sl-button pill class="back-to-btn" @click="${() => gotoRoute('/')}">Back to Recipe Book</sl-button>
         ` : html``}
 
         <!-- Displays if at shopping list route -->
@@ -316,7 +315,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
         ${(window.location.pathname == '/recipe') ? html`
           <sl-button pill @click="${() => Recipe.collectRemoveRecipe()}">Collect/Remove Recipe</sl-button>
-          <sl-button pill @click="${() => gotoRoute(localStorage.getItem('previousPath'))}">Back to ${localStorage.getItem('previousName')}</sl-button>
+          <sl-button pill class="back-to-btn" @click="${() => gotoRoute(localStorage.getItem('previousPath'))}">Back to ${localStorage.getItem('previousName')}</sl-button>
       ` : html``}
 
       ${(window.location.pathname == '/account') ? html`
@@ -365,7 +364,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
     <sl-dialog class="no-access-dialog" no-header="true">Standard members may not create their own recipes.<br> Go to the Account page to upgrade to Pro.
       <div>
       <sl-button @click="${() => gotoRoute('/account')}" pill>Go to Account</sl-button>
-      <sl-button class="access-close-btn" pill>Close</sl-button>
+      <sl-button @click="${() => this.shadowRoot.querySelector('.no-access-dialog').hide()}" class="access-close-btn" pill>Close</sl-button>
       </div>
     </sl-dialog>
 
