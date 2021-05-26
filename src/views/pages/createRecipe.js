@@ -62,6 +62,45 @@ class CreateRecipeView {
     submitSL.submit();
   }
 
+  addIngredientLine(){
+    let ingredientSection = document.querySelector('.ingredients')
+
+    let quantityField = document.createElement("sl-input")
+    quantityField.setAttribute('class', 'ingredient-field')
+    quantityField.setAttribute('name', 'quantity')
+    quantityField.setAttribute('type', 'text')
+    quantityField.setAttribute('pill', '')
+    quantityField.setAttribute('size', 'small')
+
+    let unitField = document.createElement("sl-input")
+    unitField.setAttribute('class', 'ingredient-field')
+    unitField.setAttribute('name', 'unit')
+    unitField.setAttribute('type', 'text')
+    unitField.setAttribute('pill', '')
+    unitField.setAttribute('size', 'small')
+
+    let nameField = document.createElement("sl-input")
+    nameField.setAttribute('class', 'ingredient-field ingredient-name-field')
+    nameField.setAttribute('name', 'name')
+    nameField.setAttribute('type', 'text')
+    nameField.setAttribute('pill', '')
+    nameField.setAttribute('size', 'small')
+
+    let ingredientDiv = document.createElement("div")
+
+    ingredientDiv.appendChild(quantityField)
+    ingredientDiv.appendChild(unitField)
+    ingredientDiv.appendChild(nameField)
+
+    ingredientSection.appendChild(ingredientDiv)
+  }
+
+  removeIngredientLine(){
+    let ingredientSection = document.querySelector('.ingredients')
+
+    ingredientSection.removeChild(ingredientSection.lastChild)
+  }
+
   render(){
     const template = html`
       <style>
@@ -71,30 +110,76 @@ class CreateRecipeView {
         }
       </style>
 
-
+<img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
+    
       <va-app-header class="marker-heading" title="Create Recipe" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
-      <div class="page-content">        
-        <h2 class="marker-heading">Create Your Own Recipe</h2>
+      <div class="page-content">  
+        <div class="create-sheet">
+        <h1 class="marker-heading create-heading">Create Your Own Recipe</h1>
         <sl-form method="POST" @sl-submit="${this.saveRecipe}">
-          <sl-input name="title" type="text" label="Recipe Title" pill size="small"></sl-input>
-          <sl-input name="prepTime" type="text" label="Prep Time" pill size="small"></sl-input>
-          <sl-input name="cookTime" type="text" label="Cook Time" pill size="small"></sl-input>
-          <sl-input name="servings" type="text" label="Servings" pill size="small"></sl-input>
-          <h3 class="marker-heading">Ingredients</h3>
-          <p>(Quantity must be a decimal number)</p>
-          <sl-input name="quantity" type="text" label="Qty" pill size="small"></sl-input>
-          <sl-input name="unit" type="text" label="Unit" pill size="small"></sl-input>
-          <sl-input name="name" type="text" label="Ingredient Name" pill size="small"></sl-input>
-          <sl-input name="quantity" type="text" label="Qty" pill size="small"></sl-input>
-          <sl-input name="unit" type="text" label="Unit" pill size="small"></sl-input>
-          <sl-input name="name" type="text" label="Ingredient Name" pill size="small"></sl-input>
-          <input type="file" name="image" id="file-input" style="display:none" @change=${() => preview.src=URL.createObjectURL(event.target.files[0])}/> 
-          <sl-button pill type="file" name="image" @click=${() => document.querySelector('#file-input').click()}>Choose Photo</sl-button>
-          <img id="preview" src=""/>
-          <sl-textarea name="directions" type="text" label="Directions" pill></sl-textarea>
+          <div class="create-grid">
+            <div class="create-left-top">
 
-          <sl-textarea name="notes" type="text" label="Notes" pill></sl-textarea>
+
+          <div class='create-brief-details'>
+          <p>Recipe Title</p><sl-input name="title" type="text" pill size="small"></sl-input>
+          </div>
+
+          <div class='create-brief-details'>
+          <p>Prep Time</p><sl-input name="prepTime" type="text" pill size="small"></sl-input>
+          </div>
+
+          <div class='create-brief-details'>
+          <p>Cook Time</p><sl-input name="cookTime" type="text" pill size="small"></sl-input>
+          </div>
+
+          <div class='create-brief-details'>
+          <p>Servings</p><sl-input name="servings" type="text" pill size="small"></sl-input>
+          </div>
+
+            </div>
+          <div class="create-left-bottom">
+          <div class="ingredients"> 
+          <h2 class="marker-heading">Ingredients</h2>
+          <p>(Quantity must be a decimal number)</p>
+            <div>
+            <p class="ingredient-field">Qty</p><p class="ingredient-field">Unit</p><p class="ingredient-field ingredient-name-field">Ingredient Name</p>
+            </div>
+
+          </div>
+
+          <div>
+          <sl-button @click="${() => this.addIngredientLine()}" class="add-remove-btns" circle size="small">+</sl-button>
+          <sl-button @click="${() => this.removeIngredientLine()}" class="add-remove-btns" circle size="small">-</sl-button>
+          <p class=add-remove-text>Add/Remove Line</p>
+          </div>
+
+
+
+            </div>
+
+            <div class="create-right-top">
+              <div class="image-selector">
+                <input type="file" name="image" id="file-input" style="display:none" @change=${() => preview.src=URL.createObjectURL(event.target.files[0])}/> 
+                <sl-button pill type="file" name="image" @click=${() => document.querySelector('#file-input').click()}>Choose Photo</sl-button>
+                <img id="preview" src="./../../images/image-regular.svg"/>
+              </div>
+
+            </div>
+            <div class="create-right-bottom">
+          <h2 class="marker-heading">Directions</h2>
+          <sl-textarea name="directions" type="text" pill></sl-textarea>
+          <h2 class="marker-heading">Notes</h2>
+          <sl-textarea name="notes" type="text" pill></sl-textarea>
+            </div>
+
+          </div>
+
+
         </sl-form>
+        </div>      
+
         
       </div>      
     `

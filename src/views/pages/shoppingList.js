@@ -35,10 +35,32 @@ class ShoppingListView {
       items.removeChild(items.firstChild)
     }
     this.list.items.forEach(item => {
+      let itemDeleteButton = document.createElement("sl-button")
+      itemDeleteButton.setAttribute('class', 'item item-btn')
+      itemDeleteButton.setAttribute('size', 'small')
+      itemDeleteButton.setAttribute('pill', '')
+      let deleteButtonText = document.createTextNode("-")
+      itemDeleteButton.appendChild(deleteButtonText)
+
       let itemPlace = document.createElement("p")
+      itemPlace.setAttribute('class', 'item')
       let itemText = document.createTextNode(item)
       itemPlace.appendChild(itemText)
-      document.querySelector('.list-items').appendChild(itemPlace)
+
+      let itemDiv = document.createElement("div")
+      itemDiv.appendChild(itemDeleteButton)
+      itemDiv.appendChild(itemPlace)
+
+      items.appendChild(itemDiv)
+    })
+
+    // sets buttons up to work
+    let btns = document.querySelectorAll('.item-btn')
+    
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.removeItem(btn)
+      })
     })
   }
 
@@ -60,6 +82,19 @@ class ShoppingListView {
     this.getItems()
   }
 
+  async removeItem(item){
+    console.log(item)
+    console.log(item.nextElementSibling.innerHTML)
+
+    let itemText = item.nextElementSibling.innerHTML
+
+    const currentUser = await UserAPI.getUser(Auth.currentUser._id)
+    const listId = currentUser.shoppingList._id
+    ListAPI.removeItemFromList(listId, itemText)
+
+    this.getItems()
+  }
+
   clearListDialog(){
     document.querySelector('.clear-list-dialog').show()
   }
@@ -76,8 +111,14 @@ class ShoppingListView {
 
   render(){
     const template = html`
+
+<img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
+    
       <va-app-header title="Shopping List" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
-      <div class="page-content">
+      <div class="page-content ">
+      
+      <div class="list-sheet">
       <div class="list-items"></div>
       ${this.list == null ? html`
             <sl-spinner></sl-spinner>
@@ -86,16 +127,20 @@ class ShoppingListView {
         `
       }  
       </div>
-      <sl-dialog label="Add Item" class="add-item-dialog">
-        <sl-input class="add-item-input"></sl-input>
-        <sl-button @click="${() => this.addItem()}">Add</sl-button>
-        <sl-button>Cancel</sl-button>
+      </div>
+
+
+      <sl-dialog no-header class="add-item-dialog">
+        <p>Add the following item to shopping list:</p>
+        <sl-input pill class="add-item-input"></sl-input>
+        <sl-button @click="${() => this.addItem()}" pill>Add</sl-button>
+        <sl-button pill @click="${() => document.querySelector('.add-item-dialog').hide()}">Cancel</sl-button>
       </sl-dialog>   
       
-      <sl-dialog label="Clear List" class="clear-list-dialog">
+      <sl-dialog no-header class="clear-list-dialog">
         <p>Are you sure you want to clear the list?</p>
-        <sl-button @click="${() => this.clearList()}">Clear</sl-button>
-        <sl-button>Cancel</sl-button>
+        <sl-button @click="${() => this.clearList()}" pill>Clear</sl-button>
+        <sl-button pill @click="${() => document.querySelector('.clear-list-dialog').hide()}">Cancel</sl-button>
       </sl-dialog>   
     `
     render(template, App.rootEl)

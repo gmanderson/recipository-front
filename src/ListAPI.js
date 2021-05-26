@@ -44,6 +44,43 @@ class ListAPI {
 
   }
 
+  async removeItemFromList(listId, ingredientsList){
+    console.log(ingredientsList)
+    const response = await fetch(`${App.apiBase}/list/removeItem/${listId}`, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'},
+      body: JSON.stringify({items: ingredientsList})
+    })
+  }
+
+  async deleteList(listId){
+
+    // validate
+    if(!listId) return
+
+    // fetch the json data
+    const response = await fetch(`${App.apiBase}/list/${listId}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${localStorage.accessToken}`, "Content-Type": 'application/json'},
+    })
+
+    // if response not ok
+    if(!response.ok){ 
+      // console log error
+      const err = await response.json()
+      if(err) console.log(err)
+      // throw error (exit this function)      
+      throw new Error('Problem Deleting List')
+    }
+    
+    // convert response payload into json - store as data
+    const data = await response.json()
+    
+    // return data
+    return data
+
+}
+
 
 
 

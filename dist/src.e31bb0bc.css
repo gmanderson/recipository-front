@@ -11,6 +11,7 @@
   --brand-color-red: #F65500;
   --brand-color-yellow: #F7D720;
   --brand-color-grey: #707070;
+  --brand-color-green: #81E028;
   --brand-color: #3cc6b9;
   --link-color: --brand-color;
   --app-header-height: 60px;
@@ -80,12 +81,51 @@ a {
   text-align: center;
 }
 
+.lalign {
+  text-align: left;
+}
+
+.ralign {
+  text-align: right;
+}
+
 .large-text {
   font-size: 1.6em;
 }
 
 .brand-color {
   color: var(--brand-color);
+}
+
+sl-dialog::part(base) {
+  text-align: center;
+}
+
+sl-dialog sl-button {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  width: 150px;
+}
+
+sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+
+.left-background {
+  position: fixed;
+  top: -50px;
+  left: -15px;
+}
+
+.right-background {
+  position: fixed;
+  bottom: -20px;
+  right: -35px;
 }
 
 .generic-entry {
@@ -141,10 +181,38 @@ a {
   padding: 10px;
 }
 
-.signinup-box,
 .signup-box {
   max-width: 620px;
   text-align: center;
+}
+.signup-box sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+  width: 300px;
+  margin-top: 40px;
+}
+
+.signinup-box {
+  max-width: 620px;
+  text-align: center;
+}
+.signinup-box sl-input {
+  margin-bottom: 20px;
+}
+.signinup-box sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+  width: 320px;
+  margin-bottom: 20px;
+}
+.signinup-box sl-checkbox {
+  margin-bottom: 20px;
 }
 
 .signinup-logo {
@@ -170,18 +238,67 @@ a {
   text-align: center;
 }
 
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.form-container sl-input, .form-container sl-select {
+  margin-bottom: 20px;
+}
+
+.signup-left {
+  grid-column: 1/2;
+}
+.signup-left sl-input, .signup-left sl-select {
+  margin-right: 10px;
+}
+
+.signup-right {
+  grid-column: 2/3;
+}
+.signup-right sl-input {
+  margin-left: 10px;
+}
+
 .guide-step {
   padding: 1em;
   margin: 1.5em auto;
-  max-width: 600px;
+  max-width: 850px;
 }
 .guide-step img {
   width: 100%;
   height: auto;
 }
+.guide-step .brand-name {
+  font-size: 4em;
+  margin-bottom: 0;
+}
+.guide-step .page-sub-content {
+  width: 90%;
+  margin: auto;
+}
+.guide-step .guide-sub-heading {
+  display: inline;
+}
+.guide-step sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+.guide-step .fas {
+  color: var(--brand-color-red);
+  font-size: 2em;
+}
+.guide-step .marker-heading {
+  margin-left: 20px;
+  font-size: 1.1em;
+}
 
 .recipe-sheet {
   width: 70%;
+  background-color: #fff;
   border-color: var(--brand-color-red);
   border-style: solid;
   border-width: 5px;
@@ -191,6 +308,17 @@ a {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-areas: "images brief" "ingredients directions";
+}
+.recipe-sheet sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+
+.ingredient-heading-button {
+  display: inline-block;
 }
 
 .recipe-image {
@@ -204,14 +332,262 @@ a {
 
 .recipe-brief {
   grid-area: brief;
+  margin: 2em;
+}
+.recipe-brief .marker-heading {
+  font-size: 2em;
+  margin-top: 0;
 }
 
 .recipe-ingredients {
   grid-area: ingredients;
+  margin: 2em;
+}
+.recipe-ingredients ul {
+  list-style: none;
+  margin-left: -2.5em;
+}
+.recipe-ingredients .marker-heading {
+  margin-right: 20px;
 }
 
 .recipe-directions {
   grid-area: directions;
+  margin: 2em;
+}
+
+.list-sheet {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+.list-sheet sl-button::part(base) {
+  background-color: var(--brand-color-red);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+
+.item {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.create-sheet {
+  width: 70%;
+  background-color: #fff;
+  border-color: var(--brand-color-red);
+  border-style: solid;
+  border-width: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+.create-sheet .create-heading {
+  margin-top: 1em;
+  margin-left: 2em;
+}
+
+.create-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-areas: "left-area-top right-area-top" "left-area-bottom right-area-bottom";
+}
+
+.create-left-top {
+  margin-left: 4em;
+  margin-bottom: 1em;
+  grid-area: left-area-top;
+}
+
+.create-left-bottom {
+  margin-left: 4em;
+  margin-bottom: 1em;
+  grid-area: left-area-bottom;
+}
+.create-left-bottom sl-button.red-btn::part(base) {
+  background-color: var(--brand-color-red);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #000;
+}
+.create-left-bottom sl-button.green-btn::part(base) {
+  background-color: var(--brand-color-green);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #000;
+}
+
+.create-right-top {
+  margin-left: 1em;
+  margin-right: 4em;
+  margin-bottom: 1em;
+  grid-area: right-area-top;
+}
+.create-right-top img {
+  width: 150px;
+}
+
+.add-remove-btns {
+  margin-left: 11px;
+  margin-right: 20px;
+}
+
+.add-remove-text {
+  display: inline;
+  margin-left: 35px;
+}
+
+.create-right-bottom {
+  margin-left: 1em;
+  margin-right: 4em;
+  margin-bottom: 1em;
+  grid-area: right-area-bottom;
+}
+.create-right-bottom sl-textarea {
+  margin-bottom: 30px;
+}
+
+.ingredient-field {
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  margin-right: 17px;
+  margin-bottom: 8px;
+}
+
+.ingredient-name-field {
+  width: 200px;
+}
+
+sl-textarea::part(base) {
+  border-radius: 25px;
+}
+
+.create-brief-details {
+  display: block;
+  margin: 0;
+}
+.create-brief-details p {
+  width: 150px;
+}
+.create-brief-details sl-input {
+  width: 230px;
+}
+.create-brief-details p, .create-brief-details sl-input {
+  display: inline-block;
+}
+
+.image-selector {
+  display: block;
+}
+.image-selector sl-button {
+  position: absolute;
+  top: 8px;
+  right: 65px;
+}
+.image-selector sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-areas: "avatar name name name" "info info info buttons";
+  margin-top: 5%;
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.account-item-avatar {
+  grid-area: avatar;
+  text-align: left;
+}
+
+.account-item-name {
+  grid-area: name;
+  text-align: left;
+  padding-top: 70px;
+  padding-left: 20px;
+}
+
+.account-item-info {
+  grid-area: info;
+  text-align: left;
+}
+.account-item-info .marker-heading, .account-item-info .info-details {
+  display: inline-block;
+}
+.account-item-info .info-details {
+  margin-left: 100px;
+}
+.account-item-info .marker-heading {
+  width: 100px;
+}
+
+.account-item-buttons {
+  grid-area: buttons;
+  margin-left: auto;
+}
+.account-item-buttons sl-button::part(base) {
+  background-color: var(--brand-color-yellow);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+.account-item-buttons sl-button.red-btn::part(base) {
+  background-color: var(--brand-color-red);
+  border-color: var(--brand-color-grey);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  font-weight: bold;
+  color: #000;
+}
+
+.account-btn {
+  display: block;
+  grid-area: buttons;
+  width: 207px;
+  margin-bottom: 30px;
+}
+
+.account-edit {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+.account-edit .submit-btn, .account-edit .cancel-btn {
+  width: 200px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
+}
+
+.input-group sl-input, .input-group p, .input-group sl-select {
+  display: inline-block;
+}
+.input-group p {
+  width: 200px;
+}
+.input-group sl-input {
+  width: 400px;
+}
+.input-group sl-select {
+  width: 400px;
 }
 
 @media all and (max-width: 768px) {

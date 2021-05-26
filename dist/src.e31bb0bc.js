@@ -7511,6 +7511,57 @@ class ListAPI {
         items: ingredientsList
       })
     });
+  } // 
+
+
+  async clearList(listId) {
+    const response = await fetch("".concat(_App.default.apiBase, "/list/clearList/").concat(listId), {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken),
+        "Content-Type": 'application/json'
+      }
+    });
+  }
+
+  async removeItemFromList(listId, ingredientsList) {
+    console.log(ingredientsList);
+    const response = await fetch("".concat(_App.default.apiBase, "/list/removeItem/").concat(listId), {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken),
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        items: ingredientsList
+      })
+    });
+  }
+
+  async deleteList(listId) {
+    // validate
+    if (!listId) return; // fetch the json data
+
+    const response = await fetch("".concat(_App.default.apiBase, "/list/").concat(listId), {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken),
+        "Content-Type": 'application/json'
+      }
+    }); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem Deleting List');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
   }
 
 }
@@ -7901,6 +7952,49 @@ class UserAPI {
     return data;
   }
 
+  async changePassword(userId, userData) {
+    let dataType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'form';
+    // validate
+    if (!userId || !userData) return;
+    let responseHeader; // form data
+
+    if (dataType == 'form') {
+      // fetch response header normal (form data)
+      responseHeader = {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer ".concat(localStorage.accessToken)
+        },
+        body: userData
+      }; // json data
+    } else if (dataType == 'json') {
+      responseHeader = {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer ".concat(localStorage.accessToken),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+      };
+    } // make fetch request to backend
+
+
+    const response = await fetch("".concat(_App.default.apiBase, "/user/password/").concat(userId), responseHeader); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem updating password');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  }
+
   async getUser(userId) {
     // validate
     if (!userId) return; // fetch the json data
@@ -7983,6 +8077,32 @@ class UserAPI {
     return data;
   }
 
+  async deleteUser(userId) {
+    // validate
+    if (!userId) return; // fetch the json data
+
+    const response = await fetch("".concat(_App.default.apiBase, "/user/").concat(userId), {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer ".concat(localStorage.accessToken),
+        "Content-Type": 'application/json'
+      }
+    }); // if response not ok
+
+    if (!response.ok) {
+      // console log error
+      const err = await response.json();
+      if (err) console.log(err); // throw error (exit this function)      
+
+      throw new Error('Problem Closing Account');
+    } // convert response payload into json - store as data
+
+
+    const data = await response.json(); // return data
+
+    return data;
+  }
+
 }
 
 var _default = new UserAPI();
@@ -8045,7 +8165,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <!-- <h1 class=\"anim-in\">Hey ", "</h1> -->\n\n        <!-- <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a> -->\n        \n      <div class=\"recipes-grid\">\n        ", "\n      </div>\n      </div>\n     \n    "]);
+  const data = _taggedTemplateLiteral(["\n\n    <img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n\n      <va-app-header title=\"My Recipe Book\" user=", "></va-app-header>\n      \n      <div class=\"page-content\">\n        <!-- <h1 class=\"anim-in\">Hey ", "</h1> -->\n\n        <!-- <h3>Button example:</h3>\n        <sl-button class=\"anim-in\" @click=", ">View Profile</sl-button>\n        <p>&nbsp;</p>\n        <h3>Link example</h3>\n        <a href=\"/profile\" @click=", ">View Profile</a> -->\n        \n      <div class=\"recipes-grid\">\n        ", "\n      </div>\n      </div>\n     \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -8077,6 +8197,19 @@ class HomeView {
     } catch (err) {
       _Toast.default.show(err, 'error');
     }
+  }
+
+  async searchRecipes(searchTerm) {
+    console.log(searchTerm); // Get fresh results to search
+
+    const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+    this.favRecipes = currentUser.recipes;
+    console.log(this.favRecipes);
+    let searchResult = this.favRecipes.filter(recipe => recipe.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    this.favRecipes = searchResult;
+    console.log(this.favRecipes);
+    console.log(this.favRecipes.title);
+    this.render();
   }
 
   render() {
@@ -13829,7 +13962,7 @@ var _moment = require("moment");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["      \n      <div class=\"page-content page-centered\">\n        <div class=\"signinup-box\">\n        <h1 class=\"brand-name\" id=\"brand-sign-in\">Recipository</h1>\n        <div class=\"signinfields\"> \n          <sl-form class=\"form-signup dark-theme\" @sl-submit=", ">          \n            <div class=\"input-group\">\n              <sl-input name=\"email\" type=\"email\" placeholder=\"Email\" required pill></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input name=\"password\" type=\"password\" placeholder=\"Password\" required toggle-password pill></sl-input>\n            </div>\n            <sl-button class=\"submit-btn\" type=\"primary\" submit pill style=\"width: 100%;\">Log In</sl-button>\n          </sl-form>\n          <p>Not a member?</p>\n          <sl-button class=\"\" pill style=\"width: 100%;\" type=\"primary\" @click=", ">Sign Up</sl-button>\n          </div>  \n\n        </div>\n\n      </div>\n      <div class=\"copyright\">\n      <p>&#169; ", " Friendly Food Conglomerate</p>\n      </div>\n\n    "]);
+  const data = _taggedTemplateLiteral(["\n       <img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n\n      <div class=\"page-content page-centered\">\n        <div class=\"signinup-box\">\n        <h1 class=\"brand-name\" id=\"brand-sign-in\">Recipository</h1>\n        <div class=\"signinfields\"> \n          <sl-form class=\"dark-theme\" @sl-submit=", ">          \n            <div>\n              <sl-input name=\"email\" type=\"email\" placeholder=\"Email address\" required pill></sl-input>\n            </div>\n            <div>\n              <sl-input name=\"password\" type=\"password\" placeholder=\"Password\" required toggle-password pill></sl-input>\n            </div>\n            <sl-button class=\"submit-btn\" type=\"primary\" submit pill style=\"width: 100%;\">Log In</sl-button>\n          </sl-form>\n          <p>Not a member?</p>\n          <sl-button class=\"\" pill style=\"width: 100%;\" type=\"primary\" @click=", ">Sign Up</sl-button>\n          </div>  \n\n        </div>\n\n      </div>\n      <div class=\"copyright\">\n      <p>&#169; ", " Friendly Food Conglomerate</p>\n      </div>\n\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13891,7 +14024,7 @@ var _Utils = _interopRequireDefault(require("./../../Utils"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["      \n      <div class=\"page-content page-centered\">      \n        <div class=\"signinup-box\">\n        <img class=\"signinup-logo\" src=\"/images/logo.svg\">\n          <h1>Sign Up</h1>\n          <sl-form class=\"form-signup\" @sl-submit=", ">\n            <div class=\"input-group\">\n              <sl-input name=\"firstName\" type=\"text\" placeholder=\"First Name\" required></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input name=\"lastName\" type=\"text\" placeholder=\"Last Name\" required></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input name=\"email\" type=\"email\" placeholder=\"Email\" required></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input name=\"password\" type=\"password\" placeholder=\"Password\" required toggle-password></sl-input>\n            </div> \n            <sl-checkbox name=\"accessLevel\" type=\"checkbox\" value=\"2\">I wish to subscribe to Pro level membership. </sl-checkbox><a>Learn more.</a>        \n            <sl-button type=\"primary\" class=\"submit-btn\" submit style=\"width: 100%;\">Sign Up</sl-button>\n          </sl-form>\n          <p>Have an account? <a href=\"/signin\" @click=", ">Sign In</a></p>\n        </div>\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["  \n    \n    <img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n\n      <div class=\"page-content page-centered\">      \n        <div class=\"signinup-box\">\n        <h1>Welcome to</h1>\n        <h1 class=\"brand-name\" id=\"brand-sign-in\">Recipository</h1>\n          <sl-form class=\"form-signup\" @sl-submit=", ">\n          <div class=\"form-container\">\n            <div class=\"signup-left\">\n            <div>\n                <sl-input name=\"firstName\" type=\"text\" placeholder=\"First Name\" required pill></sl-input>\n              </div>\n              <div>\n                <sl-input name=\"email\" type=\"email\" placeholder=\"Email\" required pill></sl-input>\n              </div>\n\n              <div>\n                    <sl-select name=\"state\" placeholder=\"State\" required pill>\n                    <sl-menu-item value=\"Australian Capital Territory\">Australian Capital Territory</sl-menu-item>\n                    <sl-menu-item value=\"New South Wales\">New South Wales</sl-menu-item>\n                    <sl-menu-item value=\"Northern Territory\">Northern Territory</sl-menu-item>\n                    <sl-menu-item value=\"Queensland\">Queensland</sl-menu-item>\n                    <sl-menu-item value=\"South Australia\">South Australia</sl-menu-item>\n                    <sl-menu-item value=\"Tasmania\">Tasmania</sl-menu-item>\n                    <sl-menu-item value=\"Victoria\">Victoria</sl-menu-item>\n                    <sl-menu-item value=\"Western Australia\">Western Australia</sl-menu-item>\n                  </sl-select>\n              </div> \n\n\n              </div>\n\n\n              <div class=\"signup-right\">\n\n              <div>\n                <sl-input name=\"lastName\" type=\"text\" placeholder=\"Last Name\" required pill></sl-input>\n              </div>\n\n\n              <div>\n                <sl-input name=\"password\" type=\"password\" placeholder=\"Password\" required toggle-password pill></sl-input>\n              </div> \n\n              </div>\n            </div>\n\n            <sl-checkbox name=\"accessLevel\" type=\"checkbox\" value=\"2\">I wish to subscribe to Pro level membership.</sl-checkbox>        \n            <sl-button type=\"primary\" class=\"submit-btn\" submit style=\"width: 100%;\" pill>Create Account</sl-button>\n          </sl-form>\n          <p>Have an account? <a href=\"/signin\" @click=", ">Sign In</a></p>\n        </div>\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -13952,6 +14085,14 @@ var _Utils = _interopRequireDefault(require("../../Utils"));
 
 var _moment = _interopRequireDefault(require("moment"));
 
+var _UserAPI = _interopRequireDefault(require("../../UserAPI"));
+
+var _Toast = _interopRequireDefault(require("./../../Toast"));
+
+var _RecipeAPI = _interopRequireDefault(require("../../RecipeAPI"));
+
+var _ListAPI = _interopRequireDefault(require("../../ListAPI"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject5() {
@@ -13995,7 +14136,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Account\" user=\"", "\"></va-app-header>\n      <div class=\"page-content calign\">        \n        ", "\n        <h2>", " ", "</h2>\n        ", "\n        <p>Email ", "</p>\n        <p> State ", "</p>\n        \n        <p>Updated: ", "</p>\n\n        <sl-button @click=", ">Edit Profile</sl-button>\n        <sl-button @click=", ">Change Password</sl-button>\n        <sl-button @click=", ">Subscription Level</sl-button>\n        <sl-button @click=", ">Close Account</sl-button>\n\n        <sl-dialog class=\"close-account\" label=\"close account\"></sl-dialog>\n        <sl-dialog class=\"subscription\"></sl-dialog>\n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n\n      <va-app-header title=\"Account\" user=\"", "\"></va-app-header>\n      <div class=\"page-content calign\">\n        <div class='account-grid'>\n          <div class=\"account-item-avatar\">\n          ", "\n          </div>\n          <div class=\"account-item-name\">\n          <h1 class=\"marker-heading\">", " ", "</h1>\n        <h3 class=\"marker-heading\">", "</h3>\n          </div>\n          <div class=\"account-item-info\">\n            <div class=\"info-title\">\n              <div>\n              <p class=\"marker-heading\">Email</p><p class=\"info-details\"> ", "</p>\n              </div>\n              <div>\n              <p class=\"marker-heading\">State</p><p class=\"info-details\">  ", "</p>\n              </div>\n\n              <div>\n              <p class=\"marker-heading\">Updated</p><p class=\"info-details\"> ", "</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"account-item-buttons\">\n              <sl-button class='account-btn' pill @click=", ">Edit Details</sl-button>\n            <sl-button class='account-btn' pill @click=", ">Change Password</sl-button>\n            <sl-button class='account-btn' pill @click=", ">Subscription Level</sl-button>\n            <sl-button class='account-btn red-btn' pill @click=", ">Close Account</sl-button>\n          </div>\n        </div>      \n\n\n        <sl-dialog class=\"close-account\" no-header>\n        <p>Are you sure you want to close your account?<br>\n        <p style=\"color:var(--brand-color-red)\">WARNING:</p> CLOSURE IS PERMANENT\n        AND CAN NOT BE UNDONE</p>\n        <sl-button class=\"red-btn\" @click=\"", "\" pill>Close</sl-button>\n        <sl-button pill @click=\"", "\">Cancel</sl-button>\n        </sl-dialog>\n\n        <sl-dialog class=\"subscription\" no-header>\n          <p>Select your subscription level:</p>\n          <sl-form class=\"page-form\" @sl-submit=", ">\n        <div class=\"input-group\">\n                    <sl-select class=\"access-level-select\" name=\"accessLevel\" required size=\"small\" pill value=", ">\n                    <sl-menu-item value=\"1\">Standard Member</sl-menu-item>\n                    <sl-menu-item value=\"2\">Pro Member</sl-menu-item>\n                  </sl-select>\n              </div> \n              <sl-button pill type=\"primary\" class=\"submit-btn\" submit>Confirm</sl-button>\n          </sl-form>\n        <sl-button pill @click=\"", "\">Cancel</sl-button>\n        </sl-dialog>\n      </div>      \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14025,8 +14166,60 @@ class ProfileView {
     closeAccountDialog.show();
   }
 
+  async deleteAccount() {
+    //Fetch current user
+    const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+    console.log(currentUser.shoppingList); // Delete shopping list
+
+    await _ListAPI.default.deleteList(currentUser.shoppingList._id); // Delete each recipe
+
+    try {
+      currentUser.recipes.forEach(recipe => {
+        if (recipe.isUserRecipe === true) {
+          _RecipeAPI.default.deleteRecipe(recipe._id);
+        }
+      });
+
+      _Toast.default.show('Recipes deleted');
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    } // Delete User
+
+
+    try {
+      await _UserAPI.default.deleteUser(currentUser._id);
+
+      _Toast.default.show('User deleted');
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    } // Return to signin page
+
+
+    _Auth.default.signOut();
+  }
+
+  async changeSubscription(e) {
+    e.preventDefault();
+    const formData = e.detail.formData;
+
+    try {
+      const updatedUser = await _UserAPI.default.updateUser(_Auth.default.currentUser._id, formData);
+      delete updatedUser.password;
+      this.user = updatedUser;
+      _Auth.default.currentUser = updatedUser;
+      console.log(updatedUser.accessLevel);
+      this.render();
+
+      _Toast.default.show('Subscription updated');
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    }
+
+    document.querySelector('.subscription').hide();
+  }
+
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser && _Auth.default.currentUser.avatar ? (0, _litHtml.html)(_templateObject2(), _Auth.default.currentUser && _Auth.default.currentUser.avatar ? "".concat(_App.default.apiBase, "/images/").concat(_Auth.default.currentUser.avatar) : '') : (0, _litHtml.html)(_templateObject3()), _Auth.default.currentUser.firstName, _Auth.default.currentUser.lastName, _Auth.default.currentUser.accessLevel == 1 ? (0, _litHtml.html)(_templateObject4()) : (0, _litHtml.html)(_templateObject5()), _Auth.default.currentUser.email, _Auth.default.currentUser.state, (0, _moment.default)(_Auth.default.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a'), () => (0, _Router.gotoRoute)('/editProfile'), () => (0, _Router.gotoRoute)('/changePassword'), () => this.subscriptionDialog(), () => this.closeAccountDialog());
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), _Auth.default.currentUser && _Auth.default.currentUser.avatar ? (0, _litHtml.html)(_templateObject2(), _Auth.default.currentUser && _Auth.default.currentUser.avatar ? "".concat(_App.default.apiBase, "/images/").concat(_Auth.default.currentUser.avatar) : '') : (0, _litHtml.html)(_templateObject3()), _Auth.default.currentUser.firstName, _Auth.default.currentUser.lastName, _Auth.default.currentUser.accessLevel == 1 ? (0, _litHtml.html)(_templateObject4()) : (0, _litHtml.html)(_templateObject5()), _Auth.default.currentUser.email, _Auth.default.currentUser.state, (0, _moment.default)(_Auth.default.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a'), () => (0, _Router.gotoRoute)('/editProfile'), () => (0, _Router.gotoRoute)('/changePassword'), () => this.subscriptionDialog(), () => this.closeAccountDialog(), () => this.deleteAccount(), () => document.querySelector('.close-account').hide(), this.changeSubscription.bind(this), _Auth.default.currentUser.accessLevel, () => document.querySelector('.subscription').hide());
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14035,7 +14228,7 @@ class ProfileView {
 var _default = new ProfileView();
 
 exports.default = _default;
-},{"../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","../../Router":"Router.js","../../Auth":"Auth.js","../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js"}],"views/pages/editProfile.js":[function(require,module,exports) {
+},{"../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","../../Router":"Router.js","../../Auth":"Auth.js","../../Utils":"Utils.js","moment":"../node_modules/moment/moment.js","../../UserAPI":"UserAPI.js","./../../Toast":"Toast.js","../../RecipeAPI":"RecipeAPI.js","../../ListAPI":"ListAPI.js"}],"views/pages/editProfile.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14062,7 +14255,7 @@ var _moment = _interopRequireDefault(require("moment"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n                <input type=\"file\" name=\"avatar\" />\n              "]);
+  const data = _taggedTemplateLiteral(["\n              <input id=\"avatar-input\" style=\"display:none\" type=\"file\" name=\"avatar\" />\n                <sl-button pill size=\"medium\" type=\"file\" name=\"image\" @click=", ">Choose File</sl-button>\n              "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -14072,7 +14265,7 @@ function _templateObject5() {
 }
 
 function _templateObject4() {
-  const data = _taggedTemplateLiteral(["\n                <sl-avatar image=\"", "/images/", "\"></sl-avatar>\n                <input type=\"file\" name=\"avatar\" />\n              "]);
+  const data = _taggedTemplateLiteral(["\n                <!-- <sl-avatar image=\"", "/images/", "\"></sl-avatar> -->\n                <input id=\"avatar-input\" style=\"display:none\" type=\"file\" name=\"avatar\" />\n                <sl-button pill size=\"medium\" type=\"file\" name=\"image\" @click=", ">Choose File</sl-button>\n              "]);
 
   _templateObject4 = function _templateObject4() {
     return data;
@@ -14082,7 +14275,7 @@ function _templateObject4() {
 }
 
 function _templateObject3() {
-  const data = _taggedTemplateLiteral(["\n          <p>Updated: ", "</p>\n          <sl-form class=\"page-form\" @sl-submit=", ">\n            <div class=\"input-group\">\n              <sl-input type=\"text\" name=\"firstName\" value=\"", "\" placeholder=\"First Name\"></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input type=\"text\" name=\"lastName\" value=\"", "\" placeholder=\"Last Name\"></sl-input>\n            </div>\n            <div class=\"input-group\">\n              <sl-input type=\"text\" name=\"email\" value=\"", "\" placeholder=\"Email Address\"></sl-input>\n            </div>            \n            <div class=\"input-group\">\n              <label>Avatar</label><br>          \n              ", "\n            </div>\n            <sl-button type=\"primary\" class=\"submit-btn\" submit>Update Profile</sl-button>\n          </sl-form>\n        "]);
+  const data = _taggedTemplateLiteral(["\n          <sl-form class=\"page-form\" @sl-submit=", ">\n            <div class=\"input-group\">\n              <p class=\"marker-heading\">First Name</p>\n              <sl-input pill type=\"text\" name=\"firstName\" value=\"", "\" placeholder=\"First Name\" size=\"small\"></sl-input>\n            </div>\n            <div class=\"input-group\">\n            <p class=\"marker-heading\">Last Name</p>\n              <sl-input pill type=\"text\" name=\"lastName\" value=\"", "\" placeholder=\"Last Name\" size=\"small\"></sl-input>\n            </div>\n            <div class=\"input-group\">\n            <p class=\"marker-heading\">Email Address</p>\n              <sl-input pill type=\"text\" name=\"email\" value=\"", "\" placeholder=\"Email Address\" size=\"small\"></sl-input>\n            </div>  \n            <div class=\"input-group\">\n            <p class=\"marker-heading\">State</p>\n                    <sl-select name=\"state\" placeholder=\"State\" required size=\"small\" pill value=", ">\n                    <sl-menu-item value=\"Australian Capital Territory\">Australian Capital Territory</sl-menu-item>\n                    <sl-menu-item value=\"New South Wales\">New South Wales</sl-menu-item>\n                    <sl-menu-item value=\"Northern Territory\">Northern Territory</sl-menu-item>\n                    <sl-menu-item value=\"Queensland\">Queensland</sl-menu-item>\n                    <sl-menu-item value=\"South Australia\">South Australia</sl-menu-item>\n                    <sl-menu-item value=\"Tasmania\">Tasmania</sl-menu-item>\n                    <sl-menu-item value=\"Victoria\">Victoria</sl-menu-item>\n                    <sl-menu-item value=\"Western Australia\">Western Australia</sl-menu-item>\n                  </sl-select>\n              </div> \n            </div>            \n            <div class=\"input-group\">\n              <p class=\"marker-heading\">Profile Picture</p>          \n              ", "\n            </div>\n            <sl-button pill type=\"primary\" class=\"submit-btn\" submit>Confirm</sl-button>\n            <sl-button pill type=\"primary\" class=\"cancel-btn\" @click=\"", "\">Cancel</sl-button>\n          </sl-form>\n        "]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -14102,7 +14295,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Edit Profile\" user=", "></va-app-header>\n      <div class=\"page-content\">        \n        ", "\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header title=\"Account\" user=", "></va-app-header>\n      <div class=\"page-content\">     \n        <div class=\"account-edit\">\n\n        <h1 class=\"marker-heading\">Edit Details</h1>   \n        ", "\n        </div>\n        \n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14153,10 +14346,11 @@ class EditProfileView {
     }
 
     submitBtn.removeAttribute('loading');
+    (0, _Router.gotoRoute)('/account');
   }
 
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.user == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), (0, _moment.default)(_Auth.default.currentUser.updatedAt).format('MMMM Do YYYY, @ h:mm a'), this.updateProfileSubmitHandler.bind(this), this.user.firstName, this.user.lastName, this.user.email, this.user.avatar ? (0, _litHtml.html)(_templateObject4(), _App.default.apiBase, this.user.avatar) : (0, _litHtml.html)(_templateObject5())));
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.user == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.updateProfileSubmitHandler.bind(this), this.user.firstName, this.user.lastName, this.user.email, this.user.state, this.user.avatar ? (0, _litHtml.html)(_templateObject4(), _App.default.apiBase, this.user.avatar, () => document.querySelector('#avatar-input').click()) : (0, _litHtml.html)(_templateObject5(), () => document.querySelector('#avatar-input').click()), () => (0, _Router.gotoRoute)('/account')));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14218,7 +14412,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Explore Recipes\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      ", "\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header title=\"Explore Recipes\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      ", "\n      </div>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14259,6 +14453,23 @@ class ExploreView {
     }
   }
 
+  async searchRecipes(searchTerm) {
+    console.log(searchTerm); // Get fresh results to search
+
+    this.recipes = await _RecipeAPI.default.getCompanyRecipes();
+    console.log(this.recipes);
+    let searchResult = this.recipes.filter(recipe => recipe.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    this.recipes = searchResult;
+    console.log(this.recipes);
+    this.render();
+  }
+
+  clearSearch() {
+    document.addEventListener('sl-clear', () => {
+      console.log("CLEAR BUTTON"); // this.getCompanyRecipes()
+    });
+  }
+
   render() {
     const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.recipes == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.recipes.map(recipe => (0, _litHtml.html)(_templateObject4(), recipe._id, recipe.title, recipe.image))));
     (0, _litHtml.render)(template, _App.default.rootEl);
@@ -14294,7 +14505,7 @@ var _UserAPI = _interopRequireDefault(require("./../../UserAPI"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <div class=\"page-content calign\">  \n      <h1 class=\"brand-name\">Congratulations!</h1> \n      <h2>You're almost there...</h2>       \n        <p>The menu (that just peeked out to say hello) contains the following sections:</p>\n        <i class=\"fas fa-book\"></i>\n        <p>My Recipe Book</p>\n        <p>Here you\u2019ll find your collected recipes to browse or search. Pro members \n        will also find their own created recipes here and be able to create and \n        edit recipes.</p>\n        <i class=\"fas fa-search\"></i>\n        <p>Explore Recipes</p>\n        <p>Search or browse our entire catalogue of recipes and add them to your\n        collection.</p>\n        <i class=\"fas fa-list\"></i>\n        <p>Shopping List</p>\n        <p>Add ingredients directly from recipes to the shopping list. Add and\n        remove items manually so you know exactly what you need.</p>\n        <i class=\"fas fa-user\"></i>\n        <p>Account</p>\n        <p>Edit your details, change your password and change your subscription \n        level here.</p>\n\n\n        <sl-button type=\"primary\" @click=", " pill>Let's Go!</sl-button>\n        \n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <div class=\"page-content calign guide-step\">  \n      <h1 class=\"brand-name\">Congratulations!</h1> \n      <h1 class=\"ralign\">You're almost there...</h1>\n      \n      <div class=\"page-sub-content lalign\">\n      <p>The menu contains the following sections:</p>\n        <div>\n        <i class=\"fas fa-book guide-sub-heading\"></i>\n        <p class=\"guide-sub-heading marker-heading\">My Recipe Book</p>\n        </div>\n        <p>Here you\u2019ll find your collected recipes to browse or search. Pro members \n        will also find their own created recipes here and be able to create and \n        edit recipes.</p>\n\n        <div>\n        <i class=\"fas fa-search guide-sub-heading\"></i>\n        <p class=\"guide-sub-heading marker-heading\">Explore Recipes</p>\n        </div>\n        <p>Search or browse our entire catalogue of recipes and add them to your\n        collection.</p>\n\n        <div>\n        <i class=\"fas fa-list guide-sub-heading\"></i>\n        <p class=\"guide-sub-heading marker-heading\">Shopping List</p>\n        </div>\n        <p>Add ingredients directly from recipes to the shopping list. Add and\n        remove items manually so you know exactly what you need.</p>\n        <div>\n        <i class=\"fas fa-user guide-sub-heading\"></i>\n        <p class=\"guide-sub-heading marker-heading\">Account</p>\n        </div>\n        <p>Edit your details, change your password and change your subscription \n        level here.</p>\n      </div>\n\n\n\n        <sl-button type=\"primary\" @click=", " pill>Let's Go!</sl-button>\n        \n      </div>      \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14377,7 +14588,7 @@ function _templateObject4() {
 }
 
 function _templateObject3() {
-  const data = _taggedTemplateLiteral(["\n        <div class=\"recipe-sheet\">   \n          <div class=\"recipe-image\">\n          <img src=\"", "/images/", "\">\n          </div>\n\n          <div class=\"recipe-brief\">\n          <p>", "</p>\n          <p>Prep Time: ", "</p>\n          <p>Cook Time: ", "</p>\n          <p>Servings: ", "</p>\n\n          <sl-button>Scale Serves</sl-button>\n          </div>\n\n          <div class=\"recipe-ingredients\">\n          <h3>Ingredients</h3>\n          <sl-button @click=\"", "\">Add to Shopping List</sl-button>\n          <ul class=\"ingredients-list\">\n            ", "\n  </ul>\n        \n\n\n          <h3>Notes</h3>\n          <p>", "</p>\n          </div>\n\n          <div class=\"recipe-directions\">\n          <h3>Directions</h3>\n          <p>", "</p>\n\n          </div>\n\n          </div> \n        \n        "]);
+  const data = _taggedTemplateLiteral(["\n        <div class=\"recipe-sheet\">   \n          <div class=\"recipe-image\">\n          <img src=\"", "/images/", "\">\n          </div>\n\n          <div class=\"recipe-brief\">\n          <p class=\"marker-heading\">", "</p>\n          <p>Prep Time: ", "</p>\n          <p>Cook Time: ", "</p>\n          <p>Servings: ", "</p>\n\n          <sl-button @click=\"", "\" pill>Scale Serves</sl-button>\n          </div>\n\n          <div class=\"recipe-ingredients\">\n          <h3 class=\"ingredient-heading-button marker-heading\">Ingredients</h3>\n          <sl-button class=\"ingredient-heading-button\" @click=\"", "\" pill>Add to Shopping List</sl-button>\n          <ul class=\"ingredients-list\">\n            ", "\n  </ul>\n        \n\n\n          <h3 class=\"marker-heading\">Notes</h3>\n          <p>", "</p>\n          </div>\n\n          <div class=\"recipe-directions\">\n          <h3 class=\"marker-heading\">Directions</h3>\n          <p>", "</p>\n\n          </div>\n\n          </div> \n        \n        "]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -14397,7 +14608,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"", "\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      ", "\n      </div>\n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header title=\"", "\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      ", "\n      </div>\n      <sl-dialog class=\"scale-servings\" no-header>\n        <p>Enter number to scale ingredient quantities by</p>\n<p>(eg. 0.5 for half, 2 for double)</p>\n        <sl-input pill class=\"scale-input\"></sl-input>\n        <sl-button pill @click=\"", "\">Scale</sl-button>\n        <sl-button pill @click=\"", "\">Cancel</sl-button>\n      </sl-dialog>\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14410,18 +14621,18 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 class RecipeView {
   init() {
-    let recipeID = location.search.substring(1).split('=')[1];
-    console.log(recipeID);
+    // console.log(recipeID)
     this.render();
 
     _Utils.default.pageIntroAnim();
 
-    this.getRecipeByID(recipeID);
+    this.getRecipeByID();
   }
 
-  async getRecipeByID(id) {
+  async getRecipeByID() {
     try {
-      this.recipe = await _RecipeAPI.default.getRecipeByID(id);
+      let recipeID = location.search.substring(1).split('=')[1];
+      this.recipe = await _RecipeAPI.default.getRecipeByID(recipeID);
       console.log(this.recipe);
       document.title = this.recipe.title;
       this.render();
@@ -14435,8 +14646,6 @@ class RecipeView {
     console.log(currentUser.recipes); // Compares if recipe exists in collection
 
     if (currentUser.recipes.find(singleRecipe => singleRecipe['_id'] === this.recipe._id)) {
-      localStorage.setItem('isCollected', 'true');
-
       try {
         // Removes if exists in collection (if user recipe also deletes)
         console.log(this.recipe._id);
@@ -14453,8 +14662,6 @@ class RecipeView {
       }
     } else {
       // Adds only if doesn't exist in collection
-      localStorage.setItem('isCollected', 'false');
-
       try {
         console.log(this.recipe._id);
         await _UserAPI.default.collectRecipe(this.recipe._id);
@@ -14482,8 +14689,26 @@ class RecipeView {
     }
   }
 
+  scaleDialog() {
+    const scaleDialog = document.querySelector('.scale-servings');
+    scaleDialog.show();
+  }
+
+  async scaleServes() {
+    // Reset all to original quantities
+    await this.getRecipeByID();
+    let scaledQuantity = document.querySelector('.scale-input').value;
+    this.recipe.servings = this.recipe.servings * scaledQuantity;
+    this.recipe.ingredients.map(ingredient => {
+      ingredient.quantity = ingredient.quantity * scaledQuantity;
+    });
+    document.querySelector('.scale-input').value = '';
+    document.querySelector('.scale-servings').hide();
+    this.render();
+  }
+
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), localStorage.getItem('previousName'), JSON.stringify(_Auth.default.currentUser), this.recipe == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), _App.default.apiBase, this.recipe.image, this.recipe.title, this.recipe.prepTime, this.recipe.cookTime, this.recipe.servings, () => this.addItemsToList(), this.recipe.ingredients.map(ingredient => (0, _litHtml.html)(_templateObject4(), ingredient.quantity, ingredient.unit, ingredient.name)), this.recipe.notes, this.recipe.directions));
+    const template = (0, _litHtml.html)(_templateObject(), localStorage.getItem('previousName'), JSON.stringify(_Auth.default.currentUser), this.recipe == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), _App.default.apiBase, this.recipe.image, this.recipe.title, this.recipe.prepTime, this.recipe.cookTime, this.recipe.servings, () => this.scaleDialog(), () => this.addItemsToList(), this.recipe.ingredients.map(ingredient => (0, _litHtml.html)(_templateObject4(), ingredient.quantity, ingredient.unit, ingredient.name)), this.recipe.notes, this.recipe.directions), () => this.scaleServes(), () => document.querySelector('.scale-servings').hide());
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14519,7 +14744,7 @@ var _UserAPI = _interopRequireDefault(require("./../../UserAPI"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <style>\n        sl-input{\n          width: 50%;\n          \n        }\n      </style>\n\n\n      <va-app-header class=\"marker-heading\" title=\"Create Recipe\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">        \n        <h2 class=\"marker-heading\">Create Your Own Recipe</h2>\n        <sl-form method=\"POST\" @sl-submit=\"", "\">\n          <sl-input name=\"title\" type=\"text\" label=\"Recipe Title\" pill size=\"small\"></sl-input>\n          <sl-input name=\"prepTime\" type=\"text\" label=\"Prep Time\" pill size=\"small\"></sl-input>\n          <sl-input name=\"cookTime\" type=\"text\" label=\"Cook Time\" pill size=\"small\"></sl-input>\n          <sl-input name=\"servings\" type=\"text\" label=\"Servings\" pill size=\"small\"></sl-input>\n          <h3 class=\"marker-heading\">Ingredients</h3>\n          <p>(Quantity must be a decimal number)</p>\n          <sl-input name=\"quantity\" type=\"text\" label=\"Qty\" pill size=\"small\"></sl-input>\n          <sl-input name=\"unit\" type=\"text\" label=\"Unit\" pill size=\"small\"></sl-input>\n          <sl-input name=\"name\" type=\"text\" label=\"Ingredient Name\" pill size=\"small\"></sl-input>\n          <sl-input name=\"quantity\" type=\"text\" label=\"Qty\" pill size=\"small\"></sl-input>\n          <sl-input name=\"unit\" type=\"text\" label=\"Unit\" pill size=\"small\"></sl-input>\n          <sl-input name=\"name\" type=\"text\" label=\"Ingredient Name\" pill size=\"small\"></sl-input>\n          <input type=\"file\" name=\"image\" id=\"file-input\" style=\"display:none\" @change=", "/> \n          <sl-button pill type=\"file\" name=\"image\" @click=", ">Choose Photo</sl-button>\n          <img id=\"preview\" src=\"\"/>\n          <sl-textarea name=\"directions\" type=\"text\" label=\"Directions\" pill></sl-textarea>\n\n          <sl-textarea name=\"notes\" type=\"text\" label=\"Notes\" pill></sl-textarea>\n        </sl-form>\n        \n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n      <style>\n        sl-input{\n          width: 50%;\n          \n        }\n      </style>\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header class=\"marker-heading\" title=\"Create Recipe\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">  \n        <div class=\"create-sheet\">\n        <h1 class=\"marker-heading create-heading\">Create Your Own Recipe</h1>\n        <sl-form method=\"POST\" @sl-submit=\"", "\">\n          <div class=\"create-grid\">\n            <div class=\"create-left-top\">\n\n\n          <div class='create-brief-details'>\n          <p>Recipe Title</p><sl-input name=\"title\" type=\"text\" pill size=\"small\"></sl-input>\n          </div>\n\n          <div class='create-brief-details'>\n          <p>Prep Time</p><sl-input name=\"prepTime\" type=\"text\" pill size=\"small\"></sl-input>\n          </div>\n\n          <div class='create-brief-details'>\n          <p>Cook Time</p><sl-input name=\"cookTime\" type=\"text\" pill size=\"small\"></sl-input>\n          </div>\n\n          <div class='create-brief-details'>\n          <p>Servings</p><sl-input name=\"servings\" type=\"text\" pill size=\"small\"></sl-input>\n          </div>\n\n            </div>\n          <div class=\"create-left-bottom\">\n          <div class=\"ingredients\"> \n          <h2 class=\"marker-heading\">Ingredients</h2>\n          <p>(Quantity must be a decimal number)</p>\n            <div>\n            <p class=\"ingredient-field\">Qty</p><p class=\"ingredient-field\">Unit</p><p class=\"ingredient-field ingredient-name-field\">Ingredient Name</p>\n            </div>\n\n          </div>\n\n          <div>\n          <sl-button @click=\"", "\" class=\"add-remove-btns\" circle size=\"small\">+</sl-button>\n          <sl-button @click=\"", "\" class=\"add-remove-btns\" circle size=\"small\">-</sl-button>\n          <p class=add-remove-text>Add/Remove Line</p>\n          </div>\n\n\n\n            </div>\n\n            <div class=\"create-right-top\">\n              <div class=\"image-selector\">\n                <input type=\"file\" name=\"image\" id=\"file-input\" style=\"display:none\" @change=", "/> \n                <sl-button pill type=\"file\" name=\"image\" @click=", ">Choose Photo</sl-button>\n                <img id=\"preview\" src=\"./../../images/image-regular.svg\"/>\n              </div>\n\n            </div>\n            <div class=\"create-right-bottom\">\n          <h2 class=\"marker-heading\">Directions</h2>\n          <sl-textarea name=\"directions\" type=\"text\" pill></sl-textarea>\n          <h2 class=\"marker-heading\">Notes</h2>\n          <sl-textarea name=\"notes\" type=\"text\" pill></sl-textarea>\n            </div>\n\n          </div>\n\n\n        </sl-form>\n        </div>      \n\n        \n      </div>      \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14586,8 +14811,40 @@ class CreateRecipeView {
     submitSL.submit();
   }
 
+  addIngredientLine() {
+    let ingredientSection = document.querySelector('.ingredients');
+    let quantityField = document.createElement("sl-input");
+    quantityField.setAttribute('class', 'ingredient-field');
+    quantityField.setAttribute('name', 'quantity');
+    quantityField.setAttribute('type', 'text');
+    quantityField.setAttribute('pill', '');
+    quantityField.setAttribute('size', 'small');
+    let unitField = document.createElement("sl-input");
+    unitField.setAttribute('class', 'ingredient-field');
+    unitField.setAttribute('name', 'unit');
+    unitField.setAttribute('type', 'text');
+    unitField.setAttribute('pill', '');
+    unitField.setAttribute('size', 'small');
+    let nameField = document.createElement("sl-input");
+    nameField.setAttribute('class', 'ingredient-field ingredient-name-field');
+    nameField.setAttribute('name', 'name');
+    nameField.setAttribute('type', 'text');
+    nameField.setAttribute('pill', '');
+    nameField.setAttribute('size', 'small');
+    let ingredientDiv = document.createElement("div");
+    ingredientDiv.appendChild(quantityField);
+    ingredientDiv.appendChild(unitField);
+    ingredientDiv.appendChild(nameField);
+    ingredientSection.appendChild(ingredientDiv);
+  }
+
+  removeIngredientLine() {
+    let ingredientSection = document.querySelector('.ingredients');
+    ingredientSection.removeChild(ingredientSection.lastChild);
+  }
+
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.saveRecipe, () => preview.src = URL.createObjectURL(event.target.files[0]), () => document.querySelector('#file-input').click());
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.saveRecipe, () => this.addIngredientLine(), () => this.removeIngredientLine(), () => preview.src = URL.createObjectURL(event.target.files[0]), () => document.querySelector('#file-input').click());
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14643,7 +14900,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Shopping List\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">\n      <div class=\"list-items\"></div>\n      ", "  \n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header title=\"Shopping List\" user=\"", "\"></va-app-header>\n      <div class=\"page-content \">\n      \n      <div class=\"list-sheet\">\n      <div class=\"list-items\"></div>\n      ", "  \n      </div>\n      </div>\n\n\n      <sl-dialog no-header class=\"add-item-dialog\">\n        <p>Add the following item to shopping list:</p>\n        <sl-input pill class=\"add-item-input\"></sl-input>\n        <sl-button @click=\"", "\" pill>Add</sl-button>\n        <sl-button pill @click=\"", "\">Cancel</sl-button>\n      </sl-dialog>   \n      \n      <sl-dialog no-header class=\"clear-list-dialog\">\n        <p>Are you sure you want to clear the list?</p>\n        <sl-button @click=\"", "\" pill>Clear</sl-button>\n        <sl-button pill @click=\"", "\">Cancel</sl-button>\n      </sl-dialog>   \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14679,16 +14936,82 @@ class ShoppingListView {
   }
 
   printList() {
+    let items = document.querySelector('.list-items');
+
+    while (items.firstChild) {
+      items.removeChild(items.firstChild);
+    }
+
     this.list.items.forEach(item => {
+      let itemDeleteButton = document.createElement("sl-button");
+      itemDeleteButton.setAttribute('class', 'item item-btn');
+      itemDeleteButton.setAttribute('size', 'small');
+      itemDeleteButton.setAttribute('pill', '');
+      let deleteButtonText = document.createTextNode("-");
+      itemDeleteButton.appendChild(deleteButtonText);
       let itemPlace = document.createElement("p");
+      itemPlace.setAttribute('class', 'item');
       let itemText = document.createTextNode(item);
       itemPlace.appendChild(itemText);
-      document.querySelector('.list-items').appendChild(itemPlace);
+      let itemDiv = document.createElement("div");
+      itemDiv.appendChild(itemDeleteButton);
+      itemDiv.appendChild(itemPlace);
+      items.appendChild(itemDiv);
+    }); // sets buttons up to work
+
+    let btns = document.querySelectorAll('.item-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.removeItem(btn);
+      });
     });
   }
 
+  openAddItemDialog() {
+    document.querySelector('.add-item-dialog').show();
+  }
+
+  async addItem() {
+    let addItemText = document.querySelector('.add-item-input').value;
+    console.log(addItemText);
+    const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+    const listId = currentUser.shoppingList._id;
+
+    _ListAPI.default.addItemsToList(listId, addItemText);
+
+    document.querySelector('.add-item-input').value = '';
+    document.querySelector('.add-item-dialog').hide();
+    this.getItems();
+  }
+
+  async removeItem(item) {
+    console.log(item);
+    console.log(item.nextElementSibling.innerHTML);
+    let itemText = item.nextElementSibling.innerHTML;
+    const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+    const listId = currentUser.shoppingList._id;
+
+    _ListAPI.default.removeItemFromList(listId, itemText);
+
+    this.getItems();
+  }
+
+  clearListDialog() {
+    document.querySelector('.clear-list-dialog').show();
+  }
+
+  async clearList() {
+    const currentUser = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+    const listId = currentUser.shoppingList._id;
+
+    _ListAPI.default.clearList(listId);
+
+    document.querySelector('.clear-list-dialog').hide();
+    this.getItems();
+  }
+
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.list == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.printList()));
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.list == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.printList()), () => this.addItem(), () => document.querySelector('.add-item-dialog').hide(), () => this.clearList(), () => document.querySelector('.clear-list-dialog').hide());
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14715,10 +15038,34 @@ var _Auth = _interopRequireDefault(require("./../../Auth"));
 
 var _Utils = _interopRequireDefault(require("./../../Utils"));
 
+var _UserAPI = _interopRequireDefault(require("./../../UserAPI"));
+
+var _Toast = _interopRequireDefault(require("../../Toast"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _templateObject3() {
+  const data = _taggedTemplateLiteral(["\n          <sl-form class=\"page-form\" @sl-submit=", ">\n            <div class=\"input-group\">\n            <p class=\"marker-heading\">New Password</p>\n              <sl-input pill type=\"password\" name=\"newPassword\"></sl-input>\n            </div>\n            <div class=\"input-group\">\n            <p class=\"marker-heading\">Confirm New Password</p>\n            <sl-input pill type=\"password\" name=\"confirmNewPassword\"></sl-input>\n            </div>            \n            <sl-button pill type=\"primary\" class=\"submit-btn\" submit>Confirm</sl-button>\n            <sl-button pill type=\"primary\" class=\"cancel-btn\" @click=\"", "\">Cancel</sl-button>\n          </sl-form>\n        "]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  const data = _taggedTemplateLiteral(["\n          <sl-spinner></sl-spinner>\n        "]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n      <va-app-header title=\"Profile\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\">        \n        <h1>Page title</h1>\n        <p>Page content ...</p>\n        \n      </div>      \n    "]);
+  const data = _taggedTemplateLiteral(["\n\n<img class=\"left-background\"src=\"./../../images/left-background.svg\">\n    <img class=\"right-background\" src=\"./../../images/right-background.svg\">\n    \n      <va-app-header title=\"Account\" user=\"", "\"></va-app-header>\n      <div class=\"page-content\"> \n      <div class=\"account-edit\">       \n        <h1 class=\"marker-heading\">Change Password</h1>\n      \n        ", "\n        </div>\n      </div>\n           \n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -14731,14 +15078,48 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 class ShoppingListView {
   init() {
-    document.title = 'Shopping List';
+    document.title = 'Change Password';
+    this.user = null;
     this.render();
 
     _Utils.default.pageIntroAnim();
+
+    this.getUser();
+  }
+
+  async getUser() {
+    try {
+      this.user = await _UserAPI.default.getUser(_Auth.default.currentUser._id);
+      this.render();
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    }
+  }
+
+  async changePassword(e) {
+    e.preventDefault();
+    const formData = e.detail.formData;
+    const submitBtn = document.querySelector('.submit-btn');
+    submitBtn.setAttribute('loading', '');
+
+    try {
+      const updatedUser = await _UserAPI.default.changePassword(_Auth.default.currentUser._id, formData);
+      delete updatedUser.password;
+      this.user = updatedUser;
+      _Auth.default.currentUser = updatedUser;
+      this.render();
+
+      _Toast.default.show('password updated');
+    } catch (err) {
+      _Toast.default.show(err, 'error');
+    }
+
+    submitBtn.removeAttribute('loading');
+    (0, _Router.gotoRoute)('/account');
   }
 
   render() {
-    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser));
+    const template = (0, _litHtml.html)(_templateObject(), JSON.stringify(_Auth.default.currentUser), this.user == null ? (0, _litHtml.html)(_templateObject2()) : (0, _litHtml.html)(_templateObject3(), this.changePassword.bind(this), () => (0, _Router.gotoRoute)('/account')));
     (0, _litHtml.render)(template, _App.default.rootEl);
   }
 
@@ -14747,7 +15128,7 @@ class ShoppingListView {
 var _default = new ShoppingListView();
 
 exports.default = _default;
-},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js"}],"Router.js":[function(require,module,exports) {
+},{"./../../App":"App.js","lit-html":"../node_modules/lit-html/lit-html.js","./../../Router":"Router.js","./../../Auth":"Auth.js","./../../Utils":"Utils.js","./../../UserAPI":"UserAPI.js","../../Toast":"Toast.js"}],"Router.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14874,7 +15255,7 @@ class App {
   constructor() {
     this.name = "Haircuts";
     this.version = "1.0.0";
-    this.apiBase = 'http://localhost:3000';
+    this.apiBase = 'https://ganderson-recipository.herokuapp.com';
     this.rootEl = document.getElementById("root");
     this.version = "1.0.0";
   }
@@ -16661,11 +17042,97 @@ var _createRecipe = _interopRequireDefault(require("./../views/pages/createRecip
 
 var _recipe = _interopRequireDefault(require("./../views/pages/recipe"));
 
+var _shoppingList = _interopRequireDefault(require("./../views/pages/shoppingList"));
+
+var _home = _interopRequireDefault(require("./../views/pages/home"));
+
+var _explore = _interopRequireDefault(require("./../views/pages/explore"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _templateObject16() {
+  const data = _taggedTemplateLiteral([""]);
+
+  _templateObject16 = function _templateObject16() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject15() {
+  const data = _taggedTemplateLiteral(["\n      <style>a.account-link{color:#000;} .account-link>.fas{color: var(--brand-color-red)}</style>\n      "]);
+
+  _templateObject15 = function _templateObject15() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject14() {
+  const data = _taggedTemplateLiteral([""]);
+
+  _templateObject14 = function _templateObject14() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject13() {
+  const data = _taggedTemplateLiteral(["\n          <sl-button pill @click=\"", "\">Collect/Remove Recipe</sl-button>\n          <sl-button pill @click=\"", "\">Back to ", "</sl-button>\n      "]);
+
+  _templateObject13 = function _templateObject13() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject12() {
+  const data = _taggedTemplateLiteral([""]);
+
+  _templateObject12 = function _templateObject12() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject11() {
+  const data = _taggedTemplateLiteral(["\n        <sl-button class=\"\" pill @click=", ">Add Item</sl-button>\n        <sl-button class=\"\" pill @click=", ">Clear List</sl-button>\n        <style>a.list-link{color:#000;} .list-link>.fas{color: var(--brand-color-red)}</style>\n        "]);
+
+  _templateObject11 = function _templateObject11() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject10() {
+  const data = _taggedTemplateLiteral([""]);
+
+  _templateObject10 = function _templateObject10() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject9() {
+  const data = _taggedTemplateLiteral(["\n        <!-- <sl-button pill class=\"create-btn\" @click=\"", "\">Save Recipe</sl-button> -->\n        <sl-button class=\"create-btn\" pill @click=", ">Save Recipe</sl-button>\n        <sl-button pill @click=\"", "\">Back to Recipe Book</sl-button>\n        "]);
+
+  _templateObject9 = function _templateObject9() {
+    return data;
+  };
+
+  return data;
+}
 
 function _templateObject8() {
   const data = _taggedTemplateLiteral([""]);
@@ -16678,7 +17145,7 @@ function _templateObject8() {
 }
 
 function _templateObject7() {
-  const data = _taggedTemplateLiteral(["\n          <sl-button pill @click=\"", "\">Collect Recipe</sl-button>\n          <sl-button pill @click=\"", "\">Back to ", "</sl-button>\n      "]);
+  const data = _taggedTemplateLiteral(["\n        <sl-input class=\"search-input\" clearable @sl-clear=\"", "\" pill></sl-input>\n        <sl-button pill @click=\"", "\">Search</sl-button>\n        <style>a.explore-link{color:#000;} .explore-link>.fas{color: var(--brand-color-red)}</style>\n        "]);
 
   _templateObject7 = function _templateObject7() {
     return data;
@@ -16698,7 +17165,7 @@ function _templateObject6() {
 }
 
 function _templateObject5() {
-  const data = _taggedTemplateLiteral(["\n        <!-- <sl-button pill class=\"create-btn\" @click=\"", "\">Save Recipe</sl-button> -->\n        <sl-button class=\"create-btn\" pill @click=", ">Save Recipe</sl-button>\n        <sl-button pill @click=\"", "\">Back to Recipe Book</sl-button>\n        "]);
+  const data = _taggedTemplateLiteral(["\n        <sl-button pill @click=\"", "\">Create Recipe</sl-button>\n        "]);
 
   _templateObject5 = function _templateObject5() {
     return data;
@@ -16708,7 +17175,7 @@ function _templateObject5() {
 }
 
 function _templateObject4() {
-  const data = _taggedTemplateLiteral([""]);
+  const data = _taggedTemplateLiteral(["\n        <sl-button pill @click=\"", "\">Create Recipe</sl-button>\n        "]);
 
   _templateObject4 = function _templateObject4() {
     return data;
@@ -16718,7 +17185,7 @@ function _templateObject4() {
 }
 
 function _templateObject3() {
-  const data = _taggedTemplateLiteral(["\n        <sl-input clearable pill></sl-input>\n        <sl-button pill>Search</sl-button>\n        <sl-button pill @click=\"", "\">Create Recipe</sl-button>\n        "]);
+  const data = _taggedTemplateLiteral(["\n        <sl-input class=\"search-input\" clearable @sl-clear=\"", "\" pill></sl-input>\n        <sl-button pill @click=\"", "\">Search</sl-button>\n        ", "\n        <style>a.home-link{color:#000;} .home-link>.fas{color: var(--brand-color-red)}</style>\n        "]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -16738,7 +17205,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n      .app-header {\n        background: linear-gradient(#f68400, #F7D720); /*change to vars */\n        position: fixed;\n        top: 0;\n        right: 0;\n        left: 0;\n        height: var(--app-header-height);\n        color: #000;\n        display: flex;\n        z-index: 9;\n        box-shadow: 4px 0px 10px rgba(0,0,0,0.2);\n        align-items: center;\n      }      \n\n      .app-header-main {\n        flex-grow: 1;\n        display: flex;\n        align-items: center;\n        font-family: var(--heading-font)\n      }\n\n      .app-header-main::slotted(h1){\n        color: #fff;\n      }\n\n      .app-logo a {\n        color: #fff;\n        text-decoration: none;\n        font-weight: bold;\n        font-size: 1.2em;\n        padding: .6em;\n        display: inline-block;      \n      }\n\n      .app-logo img {\n        width: 90px;\n      }\n      \n      .hamburger-btn::part(base) {\n        color: #000;\n      }\n\n      .app-top-nav {\n        display: flex;\n        height: 100%;\n        align-items: center;\n      }\n\n      .app-top-nav a {\n        display: inline-block;\n        padding: .8em;\n        text-decoration: none;\n        color: #000;\n      }\n      \n      .app-side-menu-items a {\n        display: block;\n        padding: .5em;\n        text-decoration: none;\n        font-size: 1.3em;\n        color: #333;\n        font-family: var(--heading-font)\n      }\n\n      .app-side-menu-logo {\n        width: 120px;\n        margin-bottom: 1em;\n        position: absolute;\n        top: 2em;\n        left: 1.5em;\n      }\n\n      .page-title {\n        color: var(--app-header-txt-color);\n        margin-right: 0.5em;\n        margin-left: 0.5em;\n        font-size: var(--app-header-title-font-size);\n      }\n\n      sl-button{\n        margin: 0.5em;\n\n      }\n\n      sl-button::part(base){\n        background-color: var(--brand-color-yellow);\n        border-color: var(--brand-color-grey);\n        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);\n      }\n\n      sl-input::part(base){\n        border-color: var(--brand-color-grey);\n      }\n\n      /* active nav links */\n      .app-top-nav a.active,\n      .app-side-menu-items a.active {\n        font-weight: bold;\n      }\n\n      /* RESPONSIVE - MOBILE ------------------- */\n      @media all and (max-width: 768px){       \n        \n        .app-top-nav {\n          display: none;\n        }\n      }\n\n    </style>\n\n    <header class=\"app-header\">\n      <sl-icon-button class=\"hamburger-btn\" name=\"list\" @click=\"", "\" style=\"font-size: 1.5em;\"></sl-icon-button>       \n      \n      <div class=\"app-header-main\">\n        ", "\n        <slot></slot>\n      </div>\n\n      <nav class=\"app-top-nav\">\n        <!-- Displays if at home route -->\n        ", "\n\n        <!-- Displays if at createRecipe route -->\n        ", "\n\n\n\n        ", "\n\n              \n        <sl-dropdown>\n          <a slot=\"trigger\" href=\"#\" @click=\"", "\">\n          \n          </a>\n          <sl-menu>            \n            <sl-menu-item @click=\"", "\">Profile</sl-menu-item>\n            <sl-menu-item @click=\"", "\">Edit Profile</sl-menu-item>\n            <sl-menu-item @click=\"", "\">Sign Out</sl-menu-item>\n          </sl-menu>\n        </sl-dropdown>\n      </nav>\n    </header>\n\n\n\n    <sl-drawer class=\"app-side-menu\" placement=\"left\">\n      <nav class=\"app-side-menu-items\">\n      <sl-avatar style=\"--size: 48px;\" image=", "></sl-avatar>\n        <p>", " ", "</p>\n        <a href=\"/\" @click=\"", "\">My Recipe Book</a>\n        <a href=\"/explore\" @click=\"", "\">Explore Recipes</a>\n        <a href=\"/shoppingList\" @click=\"", "\">Shopping List</a>\n        <a href=\"/account\" @click=\"", "\">Account</a>\n        <!-- <a href=\"#\" @click=\"", "\">Log Out</a> -->\n        <a href=\"#\" @click=\"", "\">Log Out</a>\n      </nav>  \n      <h1>Recipository</h1>\n    </sl-drawer>\n\n    <sl-dialog class=\"logout-dialog\" no-header=\"true\">Are you sure you want to log out?\n      <div>\n      <sl-button @click=\"", "\">Log Out</sl-button>\n      <sl-button class=\"close-btn\">Close</sl-button>\n      </div>\n    </sl-dialog>\n\n    "]);
+  const data = _taggedTemplateLiteral(["\n    <head>\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.15.3/css/all.css\" integrity=\"sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk\" crossorigin=\"anonymous\">\n    </head>\n    <style>      \n      * {\n        box-sizing: border-box;\n      }\n      .app-header {\n        background: linear-gradient(#f68400, #F7D720); /*change to vars */\n        position: fixed;\n        top: 0;\n        right: 0;\n        left: 0;\n        height: var(--app-header-height);\n        color: #000;\n        display: flex;\n        z-index: 9;\n        box-shadow: 4px 0px 10px rgba(0,0,0,0.2);\n        align-items: center;\n      }      \n\n      .app-header-main {\n        flex-grow: 1;\n        display: flex;\n        align-items: center;\n        font-family: var(--heading-font)\n      }\n\n      .app-header-main::slotted(h1){\n        color: #fff;\n      }\n\n      .app-logo a {\n        color: #fff;\n        text-decoration: none;\n        font-weight: bold;\n        font-size: 1.2em;\n        padding: .6em;\n        display: inline-block;      \n      }\n\n      .app-logo img {\n        width: 90px;\n      }\n      \n      .hamburger-btn::part(base) {\n        color: #000;\n        font-size: 150%;\n      }\n\n      sl-drawer::part(body){\n        background-color: var(--brand-color-yellow);\n      }\n      sl-drawer::part(header){\n        background: linear-gradient(var(--brand-color-red), var(--brand-color-yellow));\n      }\n\n      sl-avatar{\n        position: relative;\n        margin-left: 37%;\n\n      }\n      /* sl-icon-button button.icon-button::part(base){\n        font-size: 150%;\n      } */\n\n      .app-top-nav {\n        display: flex;\n        height: 100%;\n        align-items: center;\n      }\n\n      .app-top-nav a {\n        display: inline-block;\n        padding: .8em;\n        text-decoration: none;\n        color: #000;\n      }\n      \n      .app-side-menu-items a {\n        display: inline-block;\n        padding: .5em;\n        text-decoration: none;\n        font-size: 1.3em;\n        color: var(--brand-color-grey);\n        font-family: var(--heading-font);\n        width: 80%;\n        vertical-align: middle;\n        margin-left: 10px;\n      }\n\n      .app-side-menu-items i {\n        margin-right: 35px;\n      }\n\n      .app-side-menu-items a:hover{\n        color:#000;\n      }\n\n      .app-side-menu-items p {\n        text-align: center;\n        font-size: 1.5rem;\n        font-family: var(--heading-font)\n      }\n\n      .app-side-menu-logo {\n        width: 120px;\n        margin-bottom: 1em;\n        position: absolute;\n        top: 2em;\n        left: 1.5em;\n      }\n\n      .page-title {\n        color: var(--app-header-txt-color);\n        margin-right: 0.5em;\n        margin-left: 0.5em;\n        font-size: var(--app-header-title-font-size);\n      }\n\n      i{\n        font-size: 1.9em;\n        vertical-align: middle;\n      }\n\n      sl-button{\n        margin: 0.5em;\n      }\n\n      sl-button::part(base){\n        background-color: var(--brand-color-yellow);\n        border-color: var(--brand-color-grey);\n        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);\n      }\n\n      sl-input::part(base){\n        border-color: var(--brand-color-grey);\n      }\n\n      .logo-bottom{\n        position: fixed;\n        bottom: 0px;\n        left:13%;\n        font-family: var(--brand-font);\n        color: var(--brand-color-red);\n      }\n\n      sl-dialog::part(base){\n        text-align: center;\n      }\n\n      sl-dialog sl-button{\n        width: 150px;\n      }\n\n      /* active nav links */\n      .app-top-nav a.active,\n      .app-side-menu-items a.active {\n        font-weight: bold;\n      }\n\n      /* RESPONSIVE - MOBILE ------------------- */\n      @media all and (max-width: 768px){       \n        \n        .app-top-nav {\n          display: none;\n        }\n      }\n\n    </style>\n\n    <header class=\"app-header\">\n      <sl-icon-button class=\"hamburger-btn\" name=\"list\" @click=\"", "\" style=\"font-size: 1.5em;\"></sl-icon-button>       \n      \n      <div class=\"app-header-main\">\n        ", "\n        <slot></slot>\n      </div>\n\n      <nav class=\"app-top-nav\">\n        <!-- Displays if at home route -->\n        ", "\n\n        <!-- Displays if at explore route -->\n        ", "\n\n        <!-- Displays if at createRecipe route -->\n        ", "\n\n        <!-- Displays if at shopping list route -->\n        ", "\n\n\n\n        ", "\n\n      ", "\n\n\n              \n        <sl-dropdown>\n          <a slot=\"trigger\" href=\"#\" @click=\"", "\">\n          \n          </a>\n          <sl-menu>            \n            <sl-menu-item @click=\"", "\">Profile</sl-menu-item>\n            <sl-menu-item @click=\"", "\">Edit Profile</sl-menu-item>\n            <sl-menu-item @click=\"", "\">Sign Out</sl-menu-item>\n          </sl-menu>\n        </sl-dropdown>\n      </nav>\n    </header>\n\n\n\n    <sl-drawer class=\"app-side-menu\" placement=\"left\">\n      <nav class=\"app-side-menu-items\">\n      <sl-avatar style=\"--size: 101px;\" image=", "></sl-avatar>\n        <p>", " ", "</p>\n\n        <a href=\"/\" @click=\"", "\" class=\"home-link\"><i class=\"fas fa-book\"></i>My Recipe Book</a>     \n        <a href=\"/explore\" @click=\"", "\" class=\"explore-link\"> <i class=\"fas fa-search\"></i>Explore Recipes</a>\n        <a href=\"/shoppingList\" @click=\"", "\" class=\"list-link\"><i class=\"fas fa-list\"></i>Shopping List</a>\n        <a href=\"/account\" @click=\"", "\" class=\"account-link\"><i class=\"fas fa-user\"></i>Account</a>\n        <a href=\"#\" @click=\"", "\"><i class=\"fas fa-sign-out-alt\"></i>Log Out</a>\n\n      </nav>  \n      <h1 class=\"logo-bottom\">Recipository</h1>\n    </sl-drawer>\n\n    <sl-dialog class=\"logout-dialog\" no-header=\"true\"><p>Are you sure you want to log out?</p>\n      <div>\n      <sl-button @click=\"", "\" pill>Log Out</sl-button>\n      <sl-button class=\"close-btn\" pill>Close</sl-button>\n      </div>\n    </sl-dialog>\n\n    <sl-dialog class=\"no-access-dialog\" no-header=\"true\">Standard members may not create their own recipes.<br> Go to the Account page to upgrade to Pro.\n      <div>\n      <sl-button @click=\"", "\" pill>Go to Account</sl-button>\n      <sl-button class=\"access-close-btn\" pill>Close</sl-button>\n      </div>\n    </sl-dialog>\n\n    "]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -16814,27 +17281,31 @@ customElements.define('va-app-header', class AppHeader extends _litElement.LitEl
     logoutDialog.show();
     const closeBtn = this.shadowRoot.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => logoutDialog.hide());
-  } // BUTTON DOES NOT YET UPDATE
+  }
 
+  searchTerm() {
+    let searchTerm = this.shadowRoot.querySelector('.search-input').value;
 
-  changeCollectRemoveButton() {
-    if (localStorage.getItem('isCollected') === 'true') {
-      this.collectRemoveBtn = 'Remove Recipe';
+    if (window.location.pathname == '/') {
+      _home.default.searchRecipes(searchTerm);
     } else {
-      this.collectRemoveBtn = 'Collect Recipe';
+      _explore.default.searchRecipes(searchTerm);
     }
+  }
 
-    _recipe.default.collectRemoveRecipe();
-
-    this.render();
+  noAccessDialog() {
+    const noAccessDialog = this.shadowRoot.querySelector('.no-access-dialog');
+    noAccessDialog.show();
+    const closeBtn = this.shadowRoot.querySelector('.access-close-btn');
+    closeBtn.addEventListener('click', () => noAccessDialog.hide());
   }
 
   render() {
-    return (0, _litElement.html)(_templateObject(), this.hamburgerClick, this.title ? (0, _litElement.html)(_templateObject2(), this.title) : "", window.location.pathname == '/' ? (0, _litElement.html)(_templateObject3(), () => (0, _Router.gotoRoute)('/createRecipe')) : (0, _litElement.html)(_templateObject4()), window.location.pathname == '/createRecipe' ? (0, _litElement.html)(_templateObject5(), _createRecipe.default.saveRecipe, () => _createRecipe.default.submitForm(), () => (0, _Router.gotoRoute)('/')) : (0, _litElement.html)(_templateObject6()), window.location.pathname == '/recipe' ? (0, _litElement.html)(_templateObject7(), () => this.changeCollectRemoveButton(), () => (0, _Router.gotoRoute)(localStorage.getItem('previousPath')), localStorage.getItem('previousName')) : (0, _litElement.html)(_templateObject8()), e => e.preventDefault(), () => (0, _Router.gotoRoute)('/account'), () => (0, _Router.gotoRoute)('/editProfile'), () => _Auth.default.signOut(), this.user && this.user.avatar ? "".concat(_App.default.apiBase, "/images/").concat(this.user.avatar) : '', this.user.firstName, this.user.lastName, this.menuClick, this.menuClick, this.menuClick, this.menuClick, () => _Auth.default.signOut(), () => this.logOutConfirmation(), () => _Auth.default.signOut());
+    return (0, _litElement.html)(_templateObject(), this.hamburgerClick, this.title ? (0, _litElement.html)(_templateObject2(), this.title) : "", window.location.pathname == '/' ? (0, _litElement.html)(_templateObject3(), () => _home.default.getFavRecipes(), () => this.searchTerm(), this.user.accessLevel == 2 ? (0, _litElement.html)(_templateObject4(), () => (0, _Router.gotoRoute)('/createRecipe')) : (0, _litElement.html)(_templateObject5(), () => this.noAccessDialog())) : (0, _litElement.html)(_templateObject6()), window.location.pathname == '/explore' ? (0, _litElement.html)(_templateObject7(), () => _explore.default.getCompanyRecipes(), () => this.searchTerm()) : (0, _litElement.html)(_templateObject8()), window.location.pathname == '/createRecipe' ? (0, _litElement.html)(_templateObject9(), _createRecipe.default.saveRecipe, () => _createRecipe.default.submitForm(), () => (0, _Router.gotoRoute)('/')) : (0, _litElement.html)(_templateObject10()), window.location.pathname == '/shoppingList' ? (0, _litElement.html)(_templateObject11(), () => _shoppingList.default.openAddItemDialog(), () => _shoppingList.default.clearListDialog()) : (0, _litElement.html)(_templateObject12()), window.location.pathname == '/recipe' ? (0, _litElement.html)(_templateObject13(), () => _recipe.default.collectRemoveRecipe(), () => (0, _Router.gotoRoute)(localStorage.getItem('previousPath')), localStorage.getItem('previousName')) : (0, _litElement.html)(_templateObject14()), window.location.pathname == '/account' ? (0, _litElement.html)(_templateObject15()) : (0, _litElement.html)(_templateObject16()), e => e.preventDefault(), () => (0, _Router.gotoRoute)('/account'), () => (0, _Router.gotoRoute)('/editProfile'), () => _Auth.default.signOut(), this.user && this.user.avatar ? "".concat(_App.default.apiBase, "/images/").concat(this.user.avatar) : '', this.user.firstName, this.user.lastName, this.menuClick, this.menuClick, this.menuClick, this.menuClick, () => this.logOutConfirmation(), () => _Auth.default.signOut(), () => (0, _Router.gotoRoute)('/account'));
   }
 
 });
-},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js","./../views/pages/createRecipe":"views/pages/createRecipe.js","./../views/pages/recipe":"views/pages/recipe.js"}],"components/va-recipe-card.js":[function(require,module,exports) {
+},{"@polymer/lit-element":"../node_modules/@polymer/lit-element/lit-element.js","./../Router":"Router.js","./../Auth":"Auth.js","./../App":"App.js","./../views/pages/createRecipe":"views/pages/createRecipe.js","./../views/pages/recipe":"views/pages/recipe.js","./../views/pages/shoppingList":"views/pages/shoppingList.js","./../views/pages/home":"views/pages/home.js","./../views/pages/explore":"views/pages/explore.js"}],"components/va-recipe-card.js":[function(require,module,exports) {
 "use strict";
 
 var _litElement = require("@polymer/lit-element");
@@ -17019,7 +17490,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54605" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60484" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

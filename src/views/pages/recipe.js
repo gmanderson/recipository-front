@@ -36,7 +36,6 @@ class RecipeView {
 
     // Compares if recipe exists in collection
     if(currentUser.recipes.find(singleRecipe => singleRecipe['_id'] === this.recipe._id)){
-      localStorage.setItem('isCollected', 'true')
       try{
         // Removes if exists in collection (if user recipe also deletes)
         console.log(this.recipe._id)
@@ -52,7 +51,6 @@ class RecipeView {
       }
     }else{
       // Adds only if doesn't exist in collection
-      localStorage.setItem('isCollected', 'false')
       try{
         console.log(this.recipe._id)
         await UserAPI.collectRecipe(this.recipe._id)
@@ -106,6 +104,10 @@ class RecipeView {
 
   render(){
     const template = html`
+
+<img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
+    
       <va-app-header title="${localStorage.getItem('previousName')}" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
       <div class="page-content">
       ${this.recipe == null ? html`
@@ -117,29 +119,29 @@ class RecipeView {
           </div>
 
           <div class="recipe-brief">
-          <p>${this.recipe.title}</p>
+          <p class="marker-heading">${this.recipe.title}</p>
           <p>Prep Time: ${this.recipe.prepTime}</p>
           <p>Cook Time: ${this.recipe.cookTime}</p>
           <p>Servings: ${this.recipe.servings}</p>
 
-          <sl-button @click="${() => this.scaleDialog()}">Scale Serves</sl-button>
+          <sl-button @click="${() => this.scaleDialog()}" pill>Scale Serves</sl-button>
           </div>
 
           <div class="recipe-ingredients">
-          <h3>Ingredients</h3>
-          <sl-button @click="${() => this.addItemsToList()}">Add to Shopping List</sl-button>
+          <h3 class="ingredient-heading-button marker-heading">Ingredients</h3>
+          <sl-button class="ingredient-heading-button" @click="${() => this.addItemsToList()}" pill>Add to Shopping List</sl-button>
           <ul class="ingredients-list">
             ${this.recipe.ingredients.map(ingredient => html`<li>${ingredient.quantity} ${ingredient.unit} ${ingredient.name}</li>`)}
   </ul>
         
 
 
-          <h3>Notes</h3>
+          <h3 class="marker-heading">Notes</h3>
           <p>${this.recipe.notes}</p>
           </div>
 
           <div class="recipe-directions">
-          <h3>Directions</h3>
+          <h3 class="marker-heading">Directions</h3>
           <p>${this.recipe.directions}</p>
 
           </div>
@@ -148,10 +150,12 @@ class RecipeView {
         
         `}
       </div>
-      <sl-dialog class="scale-servings">
+      <sl-dialog class="scale-servings" no-header>
+        <p>Enter number to scale ingredient quantities by</p>
+<p>(eg. 0.5 for half, 2 for double)</p>
         <sl-input pill class="scale-input"></sl-input>
         <sl-button pill @click="${() => this.scaleServes()}">Scale</sl-button>
-        <sl-button pill>Cancel</sl-button>
+        <sl-button pill @click="${() => document.querySelector('.scale-servings').hide()}">Cancel</sl-button>
       </sl-dialog>
     `
     render(template, App.rootEl)

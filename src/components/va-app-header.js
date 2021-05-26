@@ -49,8 +49,6 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       localStorage.setItem('previousName', 'Explore Recipes')
       localStorage.setItem('previousPath', '/explore')
     }
-
-
   }
 
   hamburgerClick(){  
@@ -78,17 +76,6 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
     closeBtn.addEventListener('click', () => logoutDialog.hide())
   }
 
-  // BUTTON DOES NOT YET UPDATE
-  changeCollectRemoveButton(){
-    if(localStorage.getItem('isCollected') === 'true'){
-      this.collectRemoveBtn = 'Remove Recipe'
-    }else{
-      this.collectRemoveBtn = 'Collect Recipe'
-    }
-      Recipe.collectRemoveRecipe()
-      this.render()
-  }
-
   searchTerm(){
     let searchTerm = this.shadowRoot.querySelector('.search-input').value
 
@@ -100,9 +87,19 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
   }
 
+  noAccessDialog(){
+    const noAccessDialog = this.shadowRoot.querySelector('.no-access-dialog')
+    noAccessDialog.show()
+
+    const closeBtn = this.shadowRoot.querySelector('.access-close-btn')
+    closeBtn.addEventListener('click', () => noAccessDialog.hide())
+  }
+
   render(){    
     return html`
-
+    <head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    </head>
     <style>      
       * {
         box-sizing: border-box;
@@ -180,12 +177,23 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       }
       
       .app-side-menu-items a {
-        display: block;
+        display: inline-block;
         padding: .5em;
         text-decoration: none;
         font-size: 1.3em;
-        color: #333;
-        font-family: var(--heading-font)
+        color: var(--brand-color-grey);
+        font-family: var(--heading-font);
+        width: 80%;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      .app-side-menu-items i {
+        margin-right: 35px;
+      }
+
+      .app-side-menu-items a:hover{
+        color:#000;
       }
 
       .app-side-menu-items p {
@@ -209,9 +217,13 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         font-size: var(--app-header-title-font-size);
       }
 
+      i{
+        font-size: 1.9em;
+        vertical-align: middle;
+      }
+
       sl-button{
         margin: 0.5em;
-
       }
 
       sl-button::part(base){
@@ -225,10 +237,19 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       }
 
       .logo-bottom{
-        /* position: fixed;
-        bottom: 0px; */
+        position: fixed;
+        bottom: 0px;
+        left:13%;
         font-family: var(--brand-font);
         color: var(--brand-color-red);
+      }
+
+      sl-dialog::part(base){
+        text-align: center;
+      }
+
+      sl-dialog sl-button{
+        width: 150px;
       }
 
       /* active nav links */
@@ -262,13 +283,19 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         ${(window.location.pathname == '/') ? html`
         <sl-input class="search-input" clearable @sl-clear="${()=>RecipeBook.getFavRecipes()}" pill></sl-input>
         <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
+        ${(this.user.accessLevel == 2) ? html `
         <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
+        ` : html`
+        <sl-button pill @click="${() => this.noAccessDialog()}">Create Recipe</sl-button>
+        `}
+        <style>a.home-link{color:#000;} .home-link>.fas{color: var(--brand-color-red)}</style>
         ` : html``}
 
         <!-- Displays if at explore route -->
         ${(window.location.pathname == '/explore') ? html`
         <sl-input class="search-input" clearable @sl-clear="${() => Explore.getCompanyRecipes()}" pill></sl-input>
         <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
+        <style>a.explore-link{color:#000;} .explore-link>.fas{color: var(--brand-color-red)}</style>
         ` : html``}
 
         <!-- Displays if at createRecipe route -->
@@ -282,14 +309,20 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         ${(window.location.pathname == '/shoppingList') ? html`
         <sl-button class="" pill @click=${() => ShoppingList.openAddItemDialog()}>Add Item</sl-button>
         <sl-button class="" pill @click=${() => ShoppingList.clearListDialog()}>Clear List</sl-button>
+        <style>a.list-link{color:#000;} .list-link>.fas{color: var(--brand-color-red)}</style>
         ` : html``}
 
 
 
         ${(window.location.pathname == '/recipe') ? html`
-          <sl-button pill @click="${() => this.changeCollectRemoveButton()}">Collect Recipe</sl-button>
+          <sl-button pill @click="${() => Recipe.collectRemoveRecipe()}">Collect/Remove Recipe</sl-button>
           <sl-button pill @click="${() => gotoRoute(localStorage.getItem('previousPath'))}">Back to ${localStorage.getItem('previousName')}</sl-button>
       ` : html``}
+
+      ${(window.location.pathname == '/account') ? html`
+      <style>a.account-link{color:#000;} .account-link>.fas{color: var(--brand-color-red)}</style>
+      ` : html``}
+
 
               
         <sl-dropdown>
@@ -311,21 +344,28 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
       <nav class="app-side-menu-items">
       <sl-avatar style="--size: 101px;" image=${(this.user && this.user.avatar) ? `${App.apiBase}/images/${this.user.avatar}` : ''}></sl-avatar>
         <p>${this.user.firstName} ${this.user.lastName}</p>
-        <a href="/" @click="${this.menuClick}">My Recipe Book</a>
-        <i class="fas fa-book"></i>
-        <a href="/explore" @click="${this.menuClick}">Explore Recipes</a>
-        <a href="/shoppingList" @click="${this.menuClick}">Shopping List</a>
-        <a href="/account" @click="${this.menuClick}">Account</a>
-        <!-- <a href="#" @click="${() => Auth.signOut()}">Log Out</a> -->
-        <a href="#" @click="${() => this.logOutConfirmation()}">Log Out</a>
+
+        <a href="/" @click="${this.menuClick}" class="home-link"><i class="fas fa-book"></i>My Recipe Book</a>     
+        <a href="/explore" @click="${this.menuClick}" class="explore-link"> <i class="fas fa-search"></i>Explore Recipes</a>
+        <a href="/shoppingList" @click="${this.menuClick}" class="list-link"><i class="fas fa-list"></i>Shopping List</a>
+        <a href="/account" @click="${this.menuClick}" class="account-link"><i class="fas fa-user"></i>Account</a>
+        <a href="#" @click="${() => this.logOutConfirmation()}"><i class="fas fa-sign-out-alt"></i>Log Out</a>
+
       </nav>  
       <h1 class="logo-bottom">Recipository</h1>
     </sl-drawer>
 
-    <sl-dialog class="logout-dialog" no-header="true">Are you sure you want to log out?
+    <sl-dialog class="logout-dialog" no-header="true"><p>Are you sure you want to log out?</p>
       <div>
-      <sl-button @click="${() => Auth.signOut()}">Log Out</sl-button>
-      <sl-button class="close-btn">Close</sl-button>
+      <sl-button @click="${() => Auth.signOut()}" pill>Log Out</sl-button>
+      <sl-button class="close-btn" pill>Close</sl-button>
+      </div>
+    </sl-dialog>
+
+    <sl-dialog class="no-access-dialog" no-header="true">Standard members may not create their own recipes.<br> Go to the Account page to upgrade to Pro.
+      <div>
+      <sl-button @click="${() => gotoRoute('/account')}" pill>Go to Account</sl-button>
+      <sl-button class="access-close-btn" pill>Close</sl-button>
       </div>
     </sl-dialog>
 

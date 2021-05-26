@@ -45,26 +45,32 @@ class ShoppingListView {
 
   render(){
     const template = html`
+
+<img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
+    
       <va-app-header title="Account" user="${JSON.stringify(Auth.currentUser)}"></va-app-header>
-      <div class="page-content">        
-        <h1>Change Password</h1>
+      <div class="page-content"> 
+      <div class="account-edit">       
+        <h1 class="marker-heading">Change Password</h1>
       
         ${(this.user == null) ? html`
           <sl-spinner></sl-spinner>
         `:html`
           <sl-form class="page-form" @sl-submit=${this.changePassword.bind(this)}>
             <div class="input-group">
-            <p>New Password</p>
-              <sl-input type="password" name="newPassword"></sl-input>
+            <p class="marker-heading">New Password</p>
+              <sl-input pill type="password" name="newPassword"></sl-input>
             </div>
             <div class="input-group">
-            <label>Confirm New Password</label>
-            <sl-input type="password" name="confirmNewPassword"></sl-input>
+            <p class="marker-heading">Confirm New Password</p>
+            <sl-input pill type="password" name="confirmNewPassword"></sl-input>
             </div>            
-            <sl-button type="primary" class="submit-btn" submit>Confirm</sl-button>
-            <sl-button type="primary" @click="${() => gotoRoute('/account')}">Cancel</sl-button>
+            <sl-button pill type="primary" class="submit-btn" submit>Confirm</sl-button>
+            <sl-button pill type="primary" class="cancel-btn" @click="${() => gotoRoute('/account')}">Cancel</sl-button>
           </sl-form>
         `}
+        </div>
       </div>
            
     `

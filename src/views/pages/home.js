@@ -46,6 +46,10 @@ class HomeView {
 
   render(){
     const template = html`
+
+    <img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
+
       <va-app-header title="My Recipe Book" user=${JSON.stringify(Auth.currentUser)}></va-app-header>
       
       <div class="page-content">

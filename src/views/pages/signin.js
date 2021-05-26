@@ -27,27 +27,18 @@ class SignInView {
 
   render(){    
     const template = html`
-    <!-- <va-background title="1"></va-background>  -->
-
-      <div class="background">
-        <div class="left-images">
-          <img src="./../../images/background/prawn.jpg">
-          <img src="./../../images/background/kiwi.jpg">
-          <img src="./../../images/background/capsicum.jpg">
-          <img src="./../../images/background/lime.jpg">
-        </div>
-      </div>
-
+       <img class="left-background"src="./../../images/left-background.svg">
+    <img class="right-background" src="./../../images/right-background.svg">
 
       <div class="page-content page-centered">
         <div class="signinup-box">
         <h1 class="brand-name" id="brand-sign-in">Recipository</h1>
         <div class="signinfields"> 
-          <sl-form class="form-signup dark-theme" @sl-submit=${this.signInSubmitHandler}>          
-            <div class="input-group">
-              <sl-input name="email" type="email" placeholder="Email" required pill></sl-input>
+          <sl-form class="dark-theme" @sl-submit=${this.signInSubmitHandler}>          
+            <div>
+              <sl-input name="email" type="email" placeholder="Email address" required pill></sl-input>
             </div>
-            <div class="input-group">
+            <div>
               <sl-input name="password" type="password" placeholder="Password" required toggle-password pill></sl-input>
             </div>
             <sl-button class="submit-btn" type="primary" submit pill style="width: 100%;">Log In</sl-button>
