@@ -199,11 +199,6 @@ class UserAPI {
 
   }
 
-
-
-
 }
-
-
 
 export default new UserAPI()

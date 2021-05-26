@@ -32,7 +32,7 @@ class SignUpView{
     <img class="right-background" src="./../../images/right-background.svg">
 
       <div class="page-content page-centered">      
-        <div class="signinup-box">
+        <div class="signinup-box signup-box">
         <h1>Welcome to</h1>
         <h1 class="brand-name" id="brand-sign-in">Recipository</h1>
           <sl-form class="form-signup" @sl-submit=${this.signUpSubmitHandler}>

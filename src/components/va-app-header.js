@@ -264,6 +264,16 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         .back-to-btn{
           display:none;
         }
+
+        sl-input::part(base){
+        width: 90%;
+        }
+
+        sl-button.search-btn{
+        margin-right: 1.4em;
+        margin-left: -0.3em;
+        }
+
       }
 
     </style>
@@ -282,7 +292,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <!-- Displays if at home route -->
         ${(window.location.pathname == '/') ? html`
         <sl-input class="search-input" clearable @sl-clear="${()=>RecipeBook.getFavRecipes()}" pill></sl-input>
-        <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
+        <sl-button class="search-btn" pill @click="${() => this.searchTerm()}">Search</sl-button>
         ${(this.user.accessLevel == 2) ? html `
         <sl-button pill @click="${() => gotoRoute('/createRecipe')}">Create Recipe</sl-button>
         ` : html`
@@ -294,7 +304,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
         <!-- Displays if at explore route -->
         ${(window.location.pathname == '/explore') ? html`
         <sl-input class="search-input" clearable @sl-clear="${() => Explore.getCompanyRecipes()}" pill></sl-input>
-        <sl-button pill @click="${() => this.searchTerm()}">Search</sl-button>
+        <sl-button class="search-btn" pill @click="${() => this.searchTerm()}">Search</sl-button>
         <style>a.explore-link{color:#000;} .explore-link>.fas{color: var(--brand-color-red)}</style>
         ` : html``}
 
