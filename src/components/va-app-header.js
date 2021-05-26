@@ -271,7 +271,7 @@ customElements.define('va-app-header', class AppHeader extends LitElement {
 
         sl-button.search-btn{
         margin-right: 1.4em;
-        margin-left: -0.3em;
+        margin-left: -0.4em;
         }
 
       }
